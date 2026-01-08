@@ -9,13 +9,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600&family=Space+Grotesk:wght@300;400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600&family=Space+Grotesk:wght@300;400;700&display=swap');
 
         :root {
             --atv-orange: #f97316;
             --bg-dark: #050810;
         }
 
+        /* Sanftes Scrollen */
         html {
             scroll-behavior: smooth;
         }
@@ -27,6 +28,7 @@
             margin: 0;
         }
 
+        /* Fixierter, stark abgedunkelter Hintergrund */
         #site-bg {
             position: fixed;
             top: 0;
@@ -46,6 +48,7 @@
             font-family: 'Space Grotesk', sans-serif;
         }
 
+        /* Titelseite - Dezentere Typografie */
         .hero-title {
             font-weight: 200;
             font-size: clamp(1.6rem, 4vw, 2.5rem);
@@ -63,6 +66,7 @@
             opacity: 0.9;
         }
 
+        /* Oranger Button */
         .atv-btn {
             background-color: var(--atv-orange);
             color: white;
@@ -88,12 +92,13 @@
             box-shadow: 0 8px 25px rgba(249, 115, 22, 0.4);
         }
 
+        /* Liniennetz Bereich */
         #map-container {
             position: relative;
             width: 100%;
             max-width: 1000px;
-            height: 50vh;
-            /* Etwas kompakter */
+            height: 48vh;
+            /* Vertikal zusammengerückt */
             background: transparent;
             border: none;
         }
@@ -114,11 +119,13 @@
             z-index: 500;
         }
 
+        /* Popup / Modal */
         .modal {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.6);
+            /* Dezent abgedunkelt */
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             z-index: 1000;
@@ -134,7 +141,7 @@
             border-radius: 1.25rem;
             max-width: 700px;
             width: 100%;
-            max-height: 80vh;
+            max-height: 85vh;
             overflow-y: auto;
             position: relative;
             box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8);
@@ -147,14 +154,66 @@
             color: #94a3b8;
             cursor: pointer;
             font-size: 1.5rem;
+            transition: color 0.2s;
         }
 
+        .close-btn:hover {
+            color: #fff;
+        }
+
+        /* Wiederhergestellte Markdown Styles für das Popup */
+        #modal-body h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--atv-orange);
+            margin-bottom: 1.25rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 0.75rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        #modal-body h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #3b82f6;
+            margin-top: 1.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        #modal-body p {
+            color: #cbd5e1;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        #modal-body ul {
+            margin-bottom: 1.5rem;
+        }
+
+        #modal-body li {
+            position: relative;
+            padding-left: 1.75rem;
+            margin-bottom: 0.5rem;
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        #modal-body li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--atv-orange);
+            font-weight: bold;
+        }
+
+        /* Taxi Hinweis Box */
         .taxi-note {
             max-width: 800px;
-            margin: 2rem auto 0;
+            margin: 1.5rem auto 0;
             padding: 1.25rem 2rem;
             border-left: 3px solid var(--atv-orange);
-            background: rgba(249, 115, 22, 0.04);
+            background: rgba(249, 115, 22, 0.05);
             border-top: 1px solid rgba(249, 115, 22, 0.1);
             border-bottom: 1px solid rgba(249, 115, 22, 0.1);
             border-right: 1px solid rgba(249, 115, 22, 0.1);
@@ -174,9 +233,9 @@
     <section class="h-screen flex flex-col items-center justify-center text-center p-6">
         <p class="hero-subtitle mb-3">atvantage präsentiert</p>
         <h1 class="hero-title mb-1">Cloud-Native-Entwicklung</h1>
-        <p class="text-lg md:text-xl font-light text-slate-400 mb-8 italic">Mit der U-Bahn 🚊 in die Wolken ✈️☁️</p>
+        <p class="text-lg md:text-xl font-light text-slate-400 mb-6 italic">Mit der U-Bahn 🚊 in die Wolken ✈️☁️</p>
 
-        <div class="max-w-xl text-slate-400 font-light leading-relaxed mb-10 text-base px-4 opacity-90">
+        <div class="max-w-xl text-slate-400 font-light leading-relaxed mb-8 text-base px-4 opacity-90">
             <p class="mb-4 text-slate-300">Willkommen an Board auf Deiner individuellen Reise in die Welt der
                 Cloud-Native-Entwicklung.</p>
             <p>Wähle die für Dich passende Verbindung. Jede Station hält neue Impulse bereit. Du entscheidest, wo Du
@@ -190,7 +249,7 @@
 
     <!-- Seite 2: Liniennetz -->
     <section id="map-section" class="min-h-screen flex flex-col items-center justify-center p-6">
-        <div class="text-center mb-6">
+        <div class="text-center mb-4">
             <h2 class="text-3xl font-light mb-1 tracking-tight">Liniennetz</h2>
             <p class="text-slate-500 uppercase tracking-widest text-[9px] font-semibold mb-6">Interaktive
                 Haltestellenübersicht</p>
@@ -230,6 +289,7 @@
         </div>
     </section>
 
+    <!-- Modal für Popups -->
     <div id="detailModal" class="modal" onclick="closeModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="close-btn" onclick="toggleModal(false)"><i class="fa-solid fa-xmark"></i></span>
@@ -246,6 +306,7 @@
 
         let hoveredStationId = null;
 
+        // Eingebettete Markdown-Daten
         const markdownData = `
 # Pipeline-Platz
 ## Lernziele
@@ -349,14 +410,14 @@ Moderne Frontend-Entwicklung mit Angular.
             });
         }
 
-        // Spam-Schutz & E-Mail Logik
+        // Spam-Schutz & E-Mail Logik (dynamisch zusammengesetzt)
         function sendConsultationEmail() {
-            const user = "competence-center";
-            const domain = "atvantage.com";
-            const subject = encodeURIComponent("Anfrage: Individuelle Cloud-Native Beratung");
-            const body = encodeURIComponent("Hallo Competence Center Team,\n\nich interessiere mich für eine individuelle Beratung zum Cloud-Native Trainingsfahrplan.\n\nBitte nehmen Sie Kontakt mit mir auf.\n\nMit freundlichen Grüßen");
+            const u = "competence-center";
+            const d = "atvantage.com";
+            const s = encodeURIComponent("Anfrage: Individuelle Cloud-Native Beratung");
+            const b = encodeURIComponent("Hallo Competence Center Team,\n\nich interessiere mich für eine individuelle Beratung zum Cloud-Native Trainingsfahrplan.\n\nBitte nehmen Sie Kontakt mit mir auf.\n\nMit freundlichen Grüßen");
 
-            window.location.href = `mailto:${user}@${domain}?subject=${subject}&body=${body}`;
+            window.location.href = `mailto:${u}@${d}?subject=${s}&body=${b}`;
         }
 
         const stations = [
