@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud-Native Journey | atvantage</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600&family=Space+Grotesk:wght@300;400&display=swap');
+
+        :root {
+            --atv-orange: #f97316;
+            --bg-dark: #050810;
+        }
+
+        /* Sanftes Scrollen für das gesamte Dokument */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #f8fafc;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+        }
+
+        /* Fixierter, stark abgedunkelter Hintergrund (Alpha-Effekt) */
+        #site-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            /* Hintergrundbild mit 90% Abdunkelung */
+            background: linear-gradient(rgba(5, 8, 16, 0.9), rgba(5, 8, 16, 0.9)),
+                url('background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        h1,
+        h2 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Dezente Titelschrift */
+        .hero-title {
+            font-weight: 200;
+            font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+            letter-spacing: -0.01em;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-weight: 300;
+            font-size: 0.85rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--atv-orange);
+            opacity: 0.9;
+        }
+
+        /* Oranger Button */
+        .atv-btn {
+            background-color: var(--atv-orange);
+            color: white;
+            padding: 0.85rem 2.8rem;
+            border-radius: 0.375rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.2);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+
+        .atv-btn:hover {
+            background-color: #fb923c;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(249, 115, 22, 0.4);
+        }
+
+        /* Netzplan Styling */
+        #map-container {
+            position: relative;
+            width: 100%;
+            max-width: 1000px;
+            height: 55vh;
+            background: rgba(10, 15, 30, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 2rem;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+        }
+
+        /* Modal / Popup */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(25px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .modal-content {
+            background: #0f172a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 3.5rem;
+            border-radius: 1.5rem;
+            max-width: 750px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1.5rem;
+            right: 2rem;
+            color: #475569;
+            cursor: pointer;
+            font-size: 1.8rem;
+        }
+
+        /* Markdown Styles */
+        #modal-body h1 {
+            font-size: 2.2rem;
+            font-weight: 200;
+            color: var(--atv-orange);
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 1rem;
+        }
+
+        #modal-body h2 {
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: #3b82f6;
+            margin-top: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        #modal-body li {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 0.6rem;
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        #modal-body li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--atv-orange);
+            font-weight: bold;
+        }
+
+        #modal-body p {
+            color: #cbd5e1;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        .taxi-note {
+            max-width: 750px;
+            margin: 3.5rem auto 1rem;
+            padding: 1.5rem 2.5rem;
+            border-left: 3px solid var(--atv-orange);
+            background: rgba(249, 115, 22, 0.03);
+            font-style: italic;
+            color: #94a3b8;
+            font-size: 0.9rem;
+            border-radius: 0 1rem 1rem 0;
+        }
+
+        @media (max-width: 768px) {
+            #map-container {
+                height: 50vh;
+            }
+
+            .modal-content {
+                padding: 2.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="site-bg"></div>
+
+    <!-- Titelfolie -->
+    <section class="h-screen flex flex-col items-center justify-center text-center p-6">
+        <p class="hero-subtitle mb-4">atvantage präsentiert</p>
+        <h1 class="hero-title mb-12">Cloud-Native-Entwicklung</h1>
+
+        <div class="max-w-2xl text-slate-400 font-light leading-relaxed mb-14 text-lg px-4 opacity-90">
+            <p class="mb-6">Willkommen an Board auf Deiner individuellen Reise in die Welt der Cloud-Native-Entwicklung.
+            </p>
+            <p>Wähle die für Dich passende Verbindung. Jede Station hält neue Impulse bereit. Du entscheidest, wo Du
+                einsteigen möchtest – wir sorgen für die richtige Vernetzung.</p>
+        </div>
+
+        <a href="#map-section" class="atv-btn">
+            Zum Liniennetz <i class="fa-solid fa-chevron-down ml-3 text-[10px]"></i>
+        </a>
+    </section>
+
+    <!-- Seite 2: Liniennetz -->
+    <section id="map-section" class="min-h-screen flex flex-col items-center justify-center p-8">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-light mb-3 tracking-tight">Netzplan</h2>
+            <p class="text-slate-500 uppercase tracking-widest text-[10px] font-semibold">Interaktive
+                Haltestellenübersicht</p>
+        </div>
+
+        <div id="map-container">
+            <canvas id="metroCanvas"></canvas>
+        </div>
+
+        <div class="taxi-note">
+            <div class="flex items-center gap-5">
+                <i class="fa-solid fa-taxi text-2xl text-orange-500/60"></i>
+                <p>Und falls Du nicht die richtige Station findest, bringt unser
+                    <strong>Individual-Schulungs-Taxi</strong> Dich direkt an Deine Adresse.</p>
+            </div>
+        </div>
+
+        <!-- Legende -->
+        <div
+            class="flex flex-wrap justify-center gap-10 mt-6 opacity-40 text-[10px] uppercase tracking-widest font-bold">
+            <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-blue-500"></span> Linie 42:
+                Frontend & API</div>
+            <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-orange-500"></span> Linie 1010:
+                Java & Spring</div>
+            <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Linie 1337:
+                Deep Dive</div>
+            <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-purple-500"></span> Linie 8080:
+                Infrastructure</div>
+        </div>
+    </section>
+
+    <!-- Modal für Popups -->
+    <div id="detailModal" class="modal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="close-btn" onclick="toggleModal(false)"><i class="fa-solid fa-xmark"></i></span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('metroCanvas');
+        const ctx = canvas.getContext('2d');
+        const modal = document.getElementById('detailModal');
+        const modalBody = document.getElementById('modal-body');
+
+        // Eingebettete Markdown-Daten
+        const markdownData = `
+# Pipeline-Platz
+## Lernziele
+Verständnis von DevOps-Kultur und Automatisierung.
+## Inhalte
+- CI/CD Grundlagen
+- Build-Tools (Maven/NPM)
+- Automatisierung mit Jenkins & Nexus
+- Git Workflow
+
+# API-Allee
+## Lernziele
+Design und Dokumentation moderner Schnittstellen.
+## Inhalte
+- RESTful Prinzipien
+- Microservices Architektur
+- Dokumentation mit OpenAPI
+- API Guidelines
+
+# Lambda-Lane
+## Lernziele
+Sicherer Umgang mit Java-Sprachfeatures.
+## Inhalte
+- Java Sprachgrundlagen Auffrischung
+- Moderne Sprachfeatures
+- Vorbereitung auf Frameworks (Spring/Quarkus)
+
+# Mockstadt
+## Lernziele
+Systematische Qualitätssicherung im Code.
+## Inhalte
+- JUnit, Mockito, AssertJ
+- Testgetriebene Entwicklung (TDD)
+- Testpyramide & Best Practices
+
+# Springfield (Eingang)
+## Lernziele
+Entwicklung von Cloud-Native Services mit Spring Boot.
+## Inhalte
+- Spring Web MVC & JPA
+- Datenbankanbindung
+- Schichtenarchitektur
+- REST-API Implementierung
+
+# Springfield (Clean Code)
+## Lernziele
+Fortgeschrittene Architekturmuster und sauberer Code.
+## Inhalte
+- Clean Code Prinzipien
+- Spring Events & AOP
+- Fortgeschrittenes Testing
+
+# Supersonic-Steig
+## Lernziele
+Ressourceneffiziente Java-Entwicklung mit Quarkus.
+## Inhalte
+- Quarkus Grundlagen (REST & JPA)
+- Native Compilation
+- Developer Experience (DevMode)
+
+# Zum Topic-Tor
+## Lernziele
+Ereignisgesteuerte Kommunikation zwischen Diensten.
+## Inhalte
+- Apache Kafka Konzepte
+- Producer & Consumer Design
+- Fehlerbehandlung in Streams
+
+# Am Docker-Dock
+## Lernziele
+Anwendungen erfolgreich containerisieren.
+## Inhalte
+- Docker Grundlagen & Architektur
+- Erstellung schlanker Images
+- 12-Factor-App Konfiguration
+
+# Podstetten
+## Lernziele
+Orchestrierung von Containern in Produktivumgebungen.
+## Inhalte
+- Kubernetes & OpenShift Ressourcen
+- Deployment Strategien
+- Automatisierte Pipelines
+
+# NG-Zone
+## Lernziele
+Moderne Frontend-Entwicklung mit Angular.
+## Inhalte
+- TypeScript & NPM Grundlagen
+- Komponenten & Services
+- RxJS & State Management
+        `;
+
+        const stationsData = {};
+        function parseMarkdown() {
+            const sections = markdownData.split(/^# /m).filter(s => s.trim() !== "");
+            sections.forEach(section => {
+                const lines = section.split('\n');
+                const title = lines[0].trim();
+                stationsData[title] = "# " + section;
+            });
+        }
+
+        const stations = [
+            { id: 'pipeline', name: 'Pipeline-Platz', x: 0.15, y: 0.25, lines: ['42', '1010'] },
+            { id: 'api', name: 'API-Allee', x: 0.35, y: 0.25, lines: ['42', '1337'] },
+            { id: 'ngzone', name: 'NG-Zone', x: 0.55, y: 0.25, lines: ['42'] },
+            { id: 'lambda', name: 'Lambda-Lane', x: 0.25, y: 0.55, lines: ['1010'] },
+            { id: 'mockstadt', name: 'Mockstadt', x: 0.45, y: 0.55, lines: ['1010'] },
+            { id: 'spring1', name: 'Springfield (Eingang)', x: 0.65, y: 0.55, lines: ['1010', '8080'] },
+            { id: 'spring2', name: 'Springfield (Clean Code)', x: 0.85, y: 0.55, lines: ['1010'] },
+            { id: 'supersonic', name: 'Supersonic-Steig', x: 0.45, y: 0.82, lines: ['1337'] },
+            { id: 'topic', name: 'Zum Topic-Tor', x: 0.75, y: 0.82, lines: ['1337'] },
+            { id: 'docker', name: 'Am Docker-Dock', x: 0.75, y: 0.25, lines: ['8080'] },
+            { id: 'podstetten', name: 'Podstetten', x: 0.9, y: 0.25, lines: ['8080'] }
+        ];
+
+        const linePaths = [
+            { id: '42', color: '#3b82f6', route: ['pipeline', 'api', 'ngzone'] },
+            { id: '1010', color: '#f97316', route: ['pipeline', 'lambda', 'mockstadt', 'spring1', 'spring2'] },
+            { id: '1337', color: '#10b981', route: ['api', 'supersonic', 'topic'] },
+            { id: '8080', color: '#a855f7', route: ['spring1', 'docker', 'podstetten'] }
+        ];
+
+        function resize() {
+            const container = document.getElementById('map-container');
+            if (!container) return;
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+            draw();
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const w = canvas.width, h = canvas.height;
+
+            // Zeichne Linien
+            linePaths.forEach(line => {
+                ctx.beginPath();
+                ctx.strokeStyle = line.color;
+                ctx.lineWidth = 8;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                const pts = line.route.map(id => stations.find(s => s.id === id));
+                pts.forEach((p, i) => {
+                    const px = p.x * w, py = p.y * h;
+                    if (i === 0) ctx.moveTo(px, py);
+                    else ctx.lineTo(px, py);
+                });
+                ctx.stroke();
+            });
+
+            // Zeichne Stationen
+            stations.forEach(s => {
+                const px = s.x * w, py = s.y * h;
+
+                // Äußerer Ring
+                ctx.beginPath();
+                ctx.arc(px, py, 16, 0, Math.PI * 2);
+                ctx.fillStyle = '#050810'; ctx.fill();
+                ctx.strokeStyle = 'rgba(255,255,255,0.7)'; ctx.lineWidth = 1.5; ctx.stroke();
+
+                // Innerer Punkt
+                ctx.beginPath();
+                ctx.arc(px, py, 6, 0, Math.PI * 2);
+                ctx.fillStyle = '#fff'; ctx.fill();
+
+                // Name
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = '500 11px "Plus Jakarta Sans"';
+                ctx.textAlign = 'center';
+                ctx.fillText(s.name, px, py + 36);
+            });
+        }
+
+        function handleInteraction(e) {
+            const rect = canvas.getBoundingClientRect();
+            const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
+            const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
+            stations.forEach(s => {
+                const dist = Math.sqrt(Math.pow(x - s.x * canvas.width, 2) + Math.pow(y - s.y * canvas.height, 2));
+                if (dist < 35) {
+                    modalBody.innerHTML = marked.parse(stationsData[s.name]);
+                    toggleModal(true);
+                }
+            });
+        }
+
+        function toggleModal(show) {
+            modal.style.display = show ? 'flex' : 'none';
+            document.body.style.overflow = show ? 'hidden' : 'auto';
+        }
+        function closeModal(e) { if (e.target === modal) toggleModal(false); }
+
+        window.addEventListener('resize', resize);
+        canvas.addEventListener('mousedown', handleInteraction);
+        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); handleInteraction(e); });
+
+        window.onload = () => {
+            parseMarkdown();
+            setTimeout(resize, 150);
+        };
+    </script>
+</body>
+
+</html>
