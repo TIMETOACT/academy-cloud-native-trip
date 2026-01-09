@@ -16,7 +16,6 @@
             --bg-dark: #050810;
         }
 
-        /* Sanftes Scrollen */
         html {
             scroll-behavior: smooth;
         }
@@ -26,9 +25,11 @@
             color: #f8fafc;
             font-family: 'Plus Jakarta Sans', sans-serif;
             margin: 0;
+            overflow-x: hidden;
+            overflow-y: auto;
         }
 
-        /* Fixierter Hintergrund */
+        /* Hintergrund mit Priorität auf lokaler Datei */
         #site-bg {
             position: fixed;
             top: 0;
@@ -36,11 +37,11 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            background: linear-gradient(rgba(5, 8, 16, 0.9), rgba(5, 8, 16, 0.9)),
-                url('background.jpg');
+            background-image: linear-gradient(rgba(5, 8, 16, 0.94), rgba(5, 8, 16, 0.88)),
+                url('background.jpg'),
+                url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2072');
             background-size: cover;
             background-position: center;
-            background-repeat: no-repeat;
         }
 
         h1,
@@ -48,7 +49,16 @@
             font-family: 'Space Grotesk', sans-serif;
         }
 
-        /* Titelseite */
+        /* Sektionen nacheinander */
+        section {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Hero / Titelseite Styles (GitHub Restore) */
         .hero-title {
             font-weight: 200;
             font-size: clamp(1.6rem, 4vw, 2.5rem);
@@ -66,7 +76,6 @@
             opacity: 0.9;
         }
 
-        /* Button Styling */
         .atv-btn {
             background-color: var(--atv-orange);
             color: white;
@@ -79,11 +88,11 @@
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             border: none;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.2);
             display: inline-flex;
             align-items: center;
             gap: 0.6rem;
             text-decoration: none;
+            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.2);
         }
 
         .atv-btn:hover {
@@ -92,31 +101,72 @@
             box-shadow: 0 8px 25px rgba(249, 115, 22, 0.4);
         }
 
-        /* Liniennetz Bereich */
-        #map-container {
-            position: relative;
-            width: 100%;
-            max-width: 1100px;
-            height: 50vh;
-            background: transparent;
-            margin: 0 auto;
+        /* Netz-Sektion Layout */
+        #map-section {
+            height: 100vh;
+            /* Genau eine Bildschirmhöhe */
+            overflow: hidden;
         }
 
-        /* Tooltip */
-        #canvas-tooltip {
+        #map-viewport {
+            flex: 1;
+            /* Nimmt den restlichen Platz zwischen Header und Footer ein */
+            width: 100%;
+            overflow: auto;
+            background: rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        #canvas-wrapper {
+            position: relative;
+            padding: 60px;
+            /* Platz für Beschriftungen am Rand */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        #metroCanvas {
+            transform-origin: center center;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Zoom-Controls Fixiert */
+        .fixed-zoom-controls {
             position: fixed;
-            pointer-events: none;
+            top: 50%;
+            right: 2rem;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            z-index: 1000;
+        }
+
+        .zoom-btn {
+            width: 44px;
+            height: 44px;
             background: rgba(15, 23, 42, 0.95);
-            color: #fff;
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: none;
-            z-index: 500;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .zoom-btn:hover {
+            background: var(--atv-orange);
+            border-color: var(--atv-orange);
+            transform: scale(1.05);
         }
 
         /* Popup */
@@ -124,36 +174,34 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            z-index: 1000;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 2000;
             align-items: center;
             justify-content: center;
-            padding: 1rem;
+            padding: 1.5rem;
         }
 
         .modal-content {
             background: #0f172a;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 0;
-            border-radius: 1.25rem;
+            border-radius: 1.5rem;
             max-width: 950px;
             width: 100%;
             max-height: 85vh;
             overflow: hidden;
             position: relative;
-            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.9);
         }
 
         .close-btn {
             position: absolute;
-            top: 1.25rem;
+            top: 1.5rem;
             right: 1.5rem;
             color: #94a3b8;
             cursor: pointer;
-            font-size: 1.5rem;
-            z-index: 50;
+            font-size: 2rem;
+            z-index: 100;
             transition: color 0.2s;
         }
 
@@ -161,24 +209,32 @@
             color: #fff;
         }
 
-        /* Popup Content Styles */
         .popup-header-title {
-            font-size: 2rem;
+            font-size: 2.1rem;
             font-weight: 700;
             color: var(--atv-orange);
-            margin-bottom: 1.5rem;
-            line-height: 1.2;
+            margin-bottom: 0.5rem;
             font-family: 'Space Grotesk', sans-serif;
+            line-height: 1.1;
+        }
+
+        .popup-subtitle {
+            font-size: 1.1rem;
+            color: #3b82f6;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 0.75rem;
         }
 
         .popup-description {
             color: #cbd5e1;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             line-height: 1.7;
         }
 
         .popup-visual-container {
-            background: #050810;
+            background: #020617;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -187,33 +243,18 @@
             height: 100%;
         }
 
-        /* Taxi Hinweis Box */
+        /* Taxi Section (GitHub Style) */
         .taxi-note {
             max-width: 850px;
-            margin: 4rem auto 0;
-            padding: 1.25rem 2rem;
+            margin: 1.5rem auto 2.5rem;
+            padding: 1rem 2.5rem;
             border-left: 3px solid var(--atv-orange);
             background: rgba(249, 115, 22, 0.04);
             border: 1px solid rgba(249, 115, 22, 0.1);
             border-left-width: 3px;
             color: #f8fafc;
-            font-size: 0.9rem;
             border-radius: 0.4rem 1.2rem 1.2rem 0.4rem;
-        }
-
-        @media (max-width: 768px) {
-            .modal-content {
-                overflow-y: auto;
-            }
-
-            .border-r-atv {
-                border-right: none !important;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            }
-
-            .popup-visual-container {
-                padding: 3rem 1rem;
-            }
+            flex-shrink: 0;
         }
     </style>
 </head>
@@ -221,460 +262,338 @@
 <body>
 
     <div id="site-bg"></div>
-    <div id="canvas-tooltip">Details anzeigen</div>
+    <div id="canvas-tooltip"
+        class="fixed pointer-events-none bg-slate-900/95 text-white px-3 py-1.5 rounded text-[10px] font-bold uppercase tracking-wider border border-white/10 hidden z-[500]">
+        Details anzeigen</div>
 
-    <!-- Titelfolie -->
-    <section class="h-screen flex flex-col items-center justify-center text-center p-6">
+    <div class="fixed-zoom-controls">
+        <button class="zoom-btn" onclick="zoomIn()" title="Heranzoomen"><i class="fa-solid fa-plus"></i></button>
+        <button class="zoom-btn" onclick="zoomOut()" title="Herauszoomen"><i class="fa-solid fa-minus"></i></button>
+        <button class="zoom-btn" onclick="resetZoom()" title="Größe anpassen"><i
+                class="fa-solid fa-expand"></i></button>
+        <button class="zoom-btn mt-4 bg-slate-800" onclick="window.scrollTo({top:0, behavior:'smooth'})"
+            title="Zum Anfang"><i class="fa-solid fa-chevron-up"></i></button>
+    </div>
+
+    <!-- SEKTION 1: TITEL -->
+    <section id="hero-section" class="items-center justify-center text-center p-6">
         <p class="hero-subtitle mb-3">atvantage präsentiert</p>
         <h1 class="hero-title mb-1">Cloud-Native-Entwicklung</h1>
-        <p class="text-lg md:text-xl font-light text-slate-400 mb-10 italic">Mit der U-Bahn 🚊 in die Wolken ✈️☁️</p>
+        <p class="text-lg md:text-xl font-light text-slate-400 mb-6 italic">Mit der U-Bahn 🚊 in die Wolken ✈️☁️</p>
 
-        <div class="max-w-xl text-slate-400 font-light leading-relaxed mb-10 text-base px-4 opacity-90">
+        <div class="max-w-xl text-slate-400 font-light leading-relaxed mb-8 text-base px-4 opacity-90 mx-auto">
             <p class="mb-4 text-slate-300">Willkommen an Board auf Deiner individuellen Reise in die Welt der
                 Cloud-Native-Entwicklung.</p>
-            <p>Wähle die für Dich passende Verbindung. Jede Station hält neue Impulse bereit.</p>
+            <p>Wähle die für Dich passende Verbindung. Jede Station hält neue Impulse bereit. Du entscheidest, wo Du
+                einsteigen möchtest.</p>
         </div>
 
-        <a href="#map-section" class="atv-btn">
+        <a href="#map-section" class="atv-btn" onclick="setTimeout(autoFit, 600)">
             Zum Liniennetz <i class="fa-solid fa-chevron-down ml-2 text-[10px]"></i>
         </a>
     </section>
 
-    <!-- Seite 2: Liniennetz -->
-    <section id="map-section" class="min-h-screen flex flex-col items-center justify-start pt-8 pb-4 px-4">
-        <div class="text-center mb-4">
+    <!-- SEKTION 2: LINIENNETZ -->
+    <section id="map-section" class="pt-6">
+        <header class="pb-4 px-6 text-center shrink-0">
             <h2 class="text-3xl font-light mb-1 tracking-tight">Liniennetz</h2>
             <p class="text-slate-500 uppercase tracking-widest text-[9px] font-semibold mb-4">Interaktive
                 Haltestellenübersicht</p>
-
             <div id="legend-container"
-                class="flex flex-wrap justify-center gap-x-8 gap-y-4 opacity-90 text-[11px] uppercase tracking-widest font-bold mb-6">
-                <!-- Wird per JS dynamisch gefüllt -->
+                class="flex flex-wrap justify-center gap-x-8 gap-y-3 opacity-95 text-[11px] uppercase tracking-widest font-bold max-w-5xl mx-auto">
+            </div>
+        </header>
+
+        <div id="map-viewport">
+            <div id="canvas-wrapper">
+                <canvas id="metroCanvas"></canvas>
             </div>
         </div>
 
-        <div id="map-container">
-            <canvas id="metroCanvas"></canvas>
-        </div>
-
-        <div class="taxi-note">
-            <div class="flex flex-col md:flex-row items-center gap-6">
-                <i class="fa-solid fa-taxi text-2xl text-orange-500/70"></i>
-                <div class="flex-1 text-center md:text-left">
-                    <p class="mb-1 leading-relaxed">Nicht die passende Station gefunden? Unser
-                        <strong>Individual-Schulungs-Taxi</strong> bringt Dich direkt an Deine Adresse.</p>
+        <footer class="shrink-0">
+            <div class="taxi-note">
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <div class="text-3xl text-orange-500/80 shrink-0"><i class="fa-solid fa-taxi"></i></div>
+                    <div class="flex-1 text-center md:text-left">
+                        <p class="mb-1 leading-relaxed">Nicht die passende Station gefunden? Unser
+                            <strong>Individual-Schulungs-Taxi</strong> bringt Dich direkt an Deine Adresse.</p>
+                        <p class="text-slate-400 text-xs">Melde Dich bei uns für eine maßgeschneiderte Weiterbildung.
+                        </p>
+                    </div>
+                    <button onclick="sendConsultationEmail()" class="atv-btn py-2 px-6 text-[10px]">
+                        Beratung anfragen <i class="fa-solid fa-paper-plane ml-2 text-[8px]"></i>
+                    </button>
                 </div>
-                <button onclick="sendConsultationEmail()" class="atv-btn py-2 px-6 text-[10px]">
-                    Beratung anfragen <i class="fa-solid fa-paper-plane ml-2 text-[8px]"></i>
-                </button>
             </div>
-        </div>
+        </footer>
     </section>
 
-    <!-- Modal für Popups -->
-    <div id="detailModal" class="modal" onclick="closeModal(event)">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <span class="close-btn" onclick="toggleModal(false)"><i class="fa-solid fa-xmark"></i></span>
-            <div id="modal-body"></div>
-        </div>
-    </div>
-
     <script>
-        // --- DATEN ---
+        // --- DATA ---
         const fallbackData = {
             "stations": [
-                { "id": "pipeline-platz", "title": "Pipeline-Platz", "subtitle": "DevOps – Spirit und Tools", "description": "Lerne die Grundlagen von DevOps, CI/CD und Cloud-Native-Entwicklung praxisnah mit Git, Maven/NPM, Jenkins und Nexus." },
-                { "id": "api-allee", "title": "API-Allee", "subtitle": "Design von RESTful APIs", "description": "Tauche in die Grundlagen moderner REST-APIs ein – von den Prinzipien bis zur Dokumentation mit OpenAPI." },
-                { "id": "lambda-lane", "title": "Lambda-Lane (über Garbage-Gasse)", "subtitle": "Java-Vertiefung", "description": "Auffrischung von Java-Grundlagen und Übung spezieller Sprach-Features für anstehende Framework-Kurse." },
-                { "id": "mockstadt", "title": "Mockstadt (am Testfalltor)", "subtitle": "Java – Automatisierte Tests", "description": "Lerne mit JUnit, Mockito und AssertJ aussagekräftige Tests zu schreiben und TDD anzuwenden." },
-                { "id": "springfield-ortseingang", "title": "Springfield (Ortseingang)", "subtitle": "Spring Boot Grundlagen", "description": "Entwickle REST-APIs mit Spring Web MVC und JPA inklusive Datenbankanbindung." },
-                { "id": "springfield-clean-code-kreuz", "title": "Springfield (Clean-Code-Kreuz)", "subtitle": "Spring Boot Vertiefung", "description": "Code-Optimierung nach Clean-Code-Prinzipien und Einsatz moderner Konzepte wie Events und AOP." },
-                { "id": "supersonic-steig", "title": "Supersonic-Steig (Am DevMode-Dock)", "subtitle": "Quarkus Grundlagen", "description": "Ressourceneffiziente Java-Entwicklung mit Quarkus und Native Compilation." },
-                { "id": "topic-tor", "title": "Zum Topic-Tor", "subtitle": "Kafka Kommunikation", "description": "Event-basierte Kommunikation zwischen Microservices mit Apache Kafka effizient gestalten." },
-                { "id": "docker-dock", "title": "Am Docker-Dock", "subtitle": "Docker Grundlagen", "description": "Grundlagen der Containerisierung und Integration von Images in CI/CD-Pipelines." },
-                { "id": "podstetten", "title": "Podstetten (Containerhof)", "subtitle": "Kubernetes & OpenShift", "description": "Container-Orchestrierung und Deployment in der HUK-spezifischen OpenShift-Umgebung." },
-                { "id": "ng-zone", "title": "NG-Zone", "subtitle": "Angular-Grundlagen", "description": "Moderne Frontend-Entwicklung mit TypeScript, Angular Komponenten, RxJS und automatisierten Tests." }
+                { "id": "pipeline-platz", "title": "Pipeline-Platz", "subtitle": "DevOps – Spirit, Werkzeuge und Infrastruktur", "description": "Lerne die Grundlagen von DevOps, CI/CD und Cloud-Native-Entwicklung – praxisnah mit den Tools und Prozessen der HUK. In einem durchgängigen Beispielprojekt (Frontend/Backend) baust du eine CI/CD-Pipeline vom Quellcode zum gebauten Artefakt auf. Ideal für Entwickler, die moderne Build-Prozesse verstehen and anwenden wollen. Mit Fokus auf Git, Maven/NPM, Jenkins und Nexus." },
+                { "id": "api-allee", "title": "API-Allee", "subtitle": "Design von RESTful APIs", "description": "Tauche in die Grundlagen moderner REST-APIs ein – von den Prinzipien bis zur Dokumentation mit OpenAPI. Du lernst, REST-konforme Schnittstellen im Kontext von Microservices zu designen und mit OpenAPI zu dokumentieren. Dabei berücksichtigen wir auch die REST-Guidelines und Architekturvorgaben der HUK. Ideal für Entwickler, die saubere, wartbare und zukunftsfähige APIs erstellen wollen." },
+                { "id": "lambda-lane", "title": "Lambda-Lane (über Garbage-Gasse)", "subtitle": "Java-Vertiefung", "description": "In den weiterführenden Entwickler-Kursen ist es wichtig, dass Du die Sprachgrundlagen beherrschst. Dieser Kurs findet sehr individuell statt, abhängig von den Anwesenden. So können Java-Grundlagen aufgefrischt, spezielle (oft problematische) Sprach-Features geübt und weiterführende Konzepte bzw. Funktionen kennengelernt werden. Das Ziel des Kurses ist, für die anstehende Kurse (Spring Boot, Quarkus) fit zu sein." },
+                { "id": "mockstadt", "title": "Mockstadt (am Testfalltor)", "subtitle": "Java – Automatisierte Tests", "description": "Gute Tests sind das Rückgrat stabiler Software – besonders in CI/CD-Pipelines. In diesem Modul lernst du, mit JUnit, Mockito und AssertJ aussagekräftige, wartbare Tests zu schreiben. Du verstehst die Testpyramide, übst Test Driven Development und entwickelst praxisnah eigene Testfälle. Ideal für Java-Entwickler, die Qualität systematisch sichern wollen. Auch dieser Kurs ist vorbereitend auf Spring-Boot- bzw. Quarkus-Seminare." },
+                { "id": "springfield-ortseingang", "title": "Springfield (Ortseingang)", "subtitle": "Spring Boot – Grundlagen mit REST & JPA", "description": "In diesem praxisnahen Modul entwickelst Du mit Spring Boot eine vollständige REST-API – inklusive Datenbankanbindung mit JPA. Die Entwicklung erfolgt dabei weitestgehend Test-Driven. Du lernst die Kernkonzepte von Spring Web MVC kennen, strukturierst sauberen Code in einer Schichtenarchitektur und berücksichtigst die Anforderungen an Cloud-Native-Anwendungen." },
+                { "id": "springfield-clean-code-kreuz", "title": "Springfield (Clean-Code-Kreuz)", "subtitle": "Spring Boot – Vertiefung", "description": "In diesem Modul vertiefst du deine Spring-Boot-Kenntnisse und optimierst Deinen Code nach Clean-Code-Prinzipien. Du lernst die Fallstricke bei der Implementierung von Spring-Boot-Tests sowie moderne Konzepte wie Events und AOP gezielt einzusetzen." },
+                { "id": "supersonic-steig", "title": "Supersonic-Steig (Am DevMode-Dock)", "subtitle": "Quarkus – Grundlagen mit REST und JPA", "description": "In diesem praxisorientierten Modul baust Du mit Quarkus eine vollständige REST-API – inklusive nahtloser Datenbankintegration über JPA. Die Umsetzung erfolgt dabei überwiegend testgetrieben. Du berücksichtigst die Prinzipien von Cloud-Native-Anwendungen." },
+                { "id": "topic-tor", "title": "Zum Topic-Tor", "subtitle": "Kafka Kommunikation", "description": "Entdecke, wie Microservices effizient über Kafka kommunizieren. Du lernst die Konzepte von Kafka und die Konsequenzen für das Design des Nachrichtenversands sowie die Fehlerbehandlung. Der Kurs ist für Spring-Boot- sowie Quarkus-Entwickler verfügbar." },
+                { "id": "docker-dock", "title": "Am Docker-Dock", "subtitle": "Grundlagen: Docker-Container für Entwickler", "description": "Hier lernst Du die Grundlagen der Containerisierung und von Docker kennen. Du erörterst den Mehrwert von Containern in modernen DevOps-Umgebungen. In den Übungen baust Du eigene Images und integrierst sie in CI/CD-Pipelines." },
+                { "id": "podstetten", "title": "Podstetten (Containerhof)", "subtitle": "Kubernetes und OpenShift für Entwickler", "description": "Lerne, Anwendungscontainer in OpenShift zu deployen – praxisnah in der HUK-Umgebung. Du lernst die wichtigsten Kubernetes-Ressourcen kennen und baust automatisierte CI/CD-Pipelines." },
+                { "id": "ng-zone", "title": "NG-Zone", "subtitle": "Angular-Grundlagen", "description": "In diesem Seminar lernst du die Grundlagen von Typescript, NPM und Angular kennen. Du entwickelst eigene Komponenten, nutzt Datenbindung, Services, RxJS und automatisierte Tests." }
             ],
             "lines": [
                 { "id": "42", "name": "DevOps-Grundlagen", "stations": ["pipeline-platz", "api-allee", "docker-dock", "podstetten"] },
-                { "id": "8080", "name": "Backend Developer (Spring)", "stations": ["api-allee", "springfield-ortseingang", "springfield-clean-code-kreuz", "topic-tor", "docker-dock"] },
-                { "id": "1024", "name": "Backend Developer (Quarkus)", "stations": ["api-allee", "supersonic-steig", "topic-tor", "docker-dock"] },
-                { "id": "1010", "name": "Frontend Developer", "stations": ["api-allee", "ng-zone", "docker-dock"] },
+                { "id": "8080", "name": "Backend Developer (Spring)", "color": "#6DB33F", "stations": ["api-allee", "springfield-ortseingang", "springfield-clean-code-kreuz", "topic-tor", "docker-dock"] },
+                { "id": "1024", "name": "Backend Developer (Quarkus)", "color": "#4695EB", "stations": ["api-allee", "supersonic-steig", "topic-tor", "docker-dock"] },
+                { "id": "1010", "name": "Frontend Developer", "color": "#E40035", "stations": ["api-allee", "ng-zone", "docker-dock"] },
                 { "id": "1337", "name": "Java-Auffrischung", "stations": ["lambda-lane", "mockstadt", "api-allee"] }
             ]
         };
 
-        const lineColors = { "42": "#3b82f6", "8080": "#a855f7", "1024": "#10b981", "1010": "#f97316", "1337": "#ec4899" };
+        const defaultColors = { "42": "#3b82f6", "1010": "#f97316", "1024": "#a855f7", "8080": "#10b981", "1337": "#ec4899" };
+        const lineOrder = ["42", "1010", "1024", "8080", "1337"];
 
-        // Optimierte Koordinaten zur Vermeidung von Linienüberschneidungen
+        // Vertikal optimierte Koordinaten (etwas nach unten verschoben, um extensions Platz zu geben)
         const coordinateMap = {
-            "pipeline-platz": { x: 0.15, y: 0.3 },
-            "api-allee": { x: 0.35, y: 0.3 },
+            "pipeline-platz": { x: 0.1, y: 0.25 },
+            "api-allee": { x: 0.35, y: 0.25 },
             "ng-zone": { x: 0.55, y: 0.45 },
-            "docker-dock": { x: 0.75, y: 0.3 },
-            "podstetten": { x: 0.92, y: 0.3 },
-            "lambda-lane": { x: 0.15, y: 0.65 },
-            "mockstadt": { x: 0.35, y: 0.65 },
-            "springfield-ortseingang": { x: 0.48, y: 0.7 }, // Springfield weiter nach links/unten
-            "springfield-clean-code-kreuz": { x: 0.60, y: 0.7 },
-            "supersonic-steig": { x: 0.40, y: 0.9 }, // Quarkus Pfad deutlich separiert
-            "topic-tor": { x: 0.75, y: 0.55 } // Exakt unter Docker-Dock
+            "docker-dock": { x: 0.75, y: 0.25 },
+            "podstetten": { x: 0.9, y: 0.25 },
+            "lambda-lane": { x: 0.1, y: 0.65 },
+            "mockstadt": { x: 0.3, y: 0.65 },
+            "springfield-ortseingang": { x: 0.52, y: 0.65 },
+            "springfield-clean-code-kreuz": { x: 0.65, y: 0.65 },
+            "supersonic-steig": { x: 0.45, y: 0.85 },
+            "topic-tor": { x: 0.75, y: 0.55 }
         };
 
         let activeData = fallbackData;
+        let zoomScale = 1.0;
         const canvas = document.getElementById('metroCanvas');
         const ctx = canvas.getContext('2d');
+        const wrapper = document.getElementById('canvas-wrapper');
+        const viewport = document.getElementById('map-viewport');
         const modal = document.getElementById('detailModal');
         const modalBody = document.getElementById('modal-body');
         const tooltip = document.getElementById('canvas-tooltip');
         let hoveredStationId = null;
 
+        function getLineColor(line) {
+            return line.color || defaultColors[line.id] || '#ffffff';
+        }
+
         async function initData() {
             try {
                 const response = await fetch('lines.json');
                 if (response.ok) activeData = await response.json();
-            } catch (e) { console.warn("Laden von lines.json fehlgeschlagen, nutze Fallback."); }
+            } catch (e) { }
             renderLegend();
             resize();
+            autoFit();
         }
 
         function renderLegend() {
             document.getElementById('legend-container').innerHTML = activeData.lines.map(line => {
-                const color = lineColors[line.id] || '#fff';
+                const color = getLineColor(line);
                 return `
                 <div class="flex items-center">
                     <div class="px-2 py-0.5 rounded border text-[11px] font-bold z-10" 
                          style="background-color: #050810; border-color: ${color}; color: #fff; min-width: 28px; text-align: center;">
                         ${line.id}
                     </div>
-                    <div class="h-1 w-6 -ml-px shadow-[0_0_8px_${color}44]" style="background-color: ${color};"></div>
+                    <div class="h-1 w-6 -ml-px" style="background-color: ${color};"></div>
                     <span class="ml-3 text-slate-300 tracking-tight normal-case font-medium">${line.name}</span>
-                </div>
-                `;
+                </div>`;
             }).join('');
         }
 
-        function sendConsultationEmail() {
-            const u = "competence-center", d = "atvantage.com";
-            const s = encodeURIComponent("Anfrage: Individuelle Cloud-Native Beratung");
-            const b = encodeURIComponent("Hallo Competence Center Team,\n\nich interessiere mich für eine individuelle Beratung zum Cloud-Native Trainingsfahrplan.\n\nBitte nehmen Sie Kontakt mit mir auf.");
-            window.location.href = `mailto:${u}@${d}?subject=${s}&body=${b}`;
+        function autoFit() {
+            if (!viewport.clientWidth || !viewport.clientHeight) return;
+            const vWidth = viewport.clientWidth - 40;
+            const vHeight = viewport.clientHeight - 40;
+            const scale = Math.min(vWidth / 1200, vHeight / 550, 1.0);
+            updateZoom(scale);
         }
 
-        function sendInterestEmail(stationTitle, subtitle) {
-            const u = "competence-center", d = "atvantage.com";
-            const s = encodeURIComponent(`Interesse am Kurs ${subtitle}`);
-            const b = encodeURIComponent(`Hallo Competence Center Team,\n\nich habe Interesse am Kurs "${subtitle}" (Haltestelle: ${stationTitle}) und bitte daher um nähere Details.\n\nMit freundlichen Grüßen`);
-            window.location.href = `mailto:${u}@${d}?subject=${s}&body=${b}`;
+        function zoomIn() { updateZoom(zoomScale + 0.1); }
+        function zoomOut() { updateZoom(zoomScale - 0.1); }
+        function resetZoom() { autoFit(); }
+
+        function updateZoom(newScale) {
+            zoomScale = Math.max(0.15, Math.min(2.0, newScale));
+            canvas.style.transform = `scale(${zoomScale})`;
+            wrapper.style.width = (1200 * zoomScale) + 'px';
+            wrapper.style.height = (550 * zoomScale) + 'px';
         }
 
         function resize() {
-            const container = document.getElementById('map-container');
-            if (!container) return;
-            canvas.width = container.clientWidth;
-            canvas.height = container.clientHeight;
+            canvas.width = 1200;
+            canvas.height = 550;
             draw();
         }
 
         function fillRoundRect(x, y, w, h, radius) {
-            ctx.beginPath();
-            ctx.moveTo(x + radius, y);
-            ctx.lineTo(x + w - radius, y);
-            ctx.quadraticCurveTo(x + w, y, x + w, y + radius);
-            ctx.lineTo(x + w, y + h - radius);
-            ctx.quadraticCurveTo(x + w, y + h, x + w - radius, y + h);
-            ctx.lineTo(x + radius, y + h);
-            ctx.quadraticCurveTo(x, y + h, x, y + h - radius);
-            ctx.lineTo(x, y + radius);
-            ctx.quadraticCurveTo(x, y, x + radius, y);
-            ctx.closePath();
+            ctx.beginPath(); ctx.moveTo(x + radius, y); ctx.lineTo(x + w - radius, y);
+            ctx.quadraticCurveTo(x + w, y, x + w, y + radius); ctx.lineTo(x + w, y + h - radius);
+            ctx.quadraticCurveTo(x + w, y + h, x + w - radius, y + h); ctx.lineTo(x + radius, y + h);
+            ctx.quadraticCurveTo(x, y + h, x, y + h - radius); ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y); ctx.closePath();
             ctx.fill(); ctx.stroke();
         }
 
-        function getAugmentedSegments(line) {
-            const segments = [];
-            for (let i = 0; i < line.stations.length - 1; i++) {
-                const s1 = line.stations[i];
-                const s2 = line.stations[i + 1];
-                const p1 = coordinateMap[s1];
-                const p2 = coordinateMap[s2];
-                if (!p1 || !p2) continue;
-
-                const intermediate = activeData.stations
-                    .filter(s => s.id !== s1 && s.id !== s2)
-                    .map(s => ({ id: s.id, pos: coordinateMap[s.id] }))
-                    .filter(s => {
-                        if (!s.pos) return false;
-                        const cross = (s.pos.y - p1.y) * (p2.x - p1.x) - (s.pos.x - p1.x) * (p2.y - p1.y);
-                        if (Math.abs(cross) > 0.01) return false;
-                        const dot = (s.pos.x - p1.x) * (p2.x - p1.x) + (s.pos.y - p1.y) * (p2.y - p1.y);
-                        if (dot < 0) return false;
-                        const squaredLength = Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2);
-                        return dot < squaredLength;
-                    })
-                    .sort((a, b) => {
-                        const distA = Math.pow(a.pos.x - p1.x, 2) + Math.pow(a.pos.y - p1.y, 2);
-                        const distB = Math.pow(b.pos.x - p1.x, 2) + Math.pow(b.pos.y - p1.y, 2);
-                        return distA - distB;
-                    });
-
-                let lastId = s1;
-                intermediate.forEach(inter => {
-                    segments.push({ from: lastId, to: inter.id });
-                    lastId = inter.id;
-                });
-                segments.push({ from: lastId, to: s2 });
-            }
-            return segments;
-        }
-
-        function getParallelLinesOnSegment(fromId, toId) {
-            return activeData.lines.filter(line => {
-                const segments = getAugmentedSegments(line);
-                return segments.some(seg => (seg.from === fromId && seg.to === toId) || (seg.from === toId && seg.to === fromId));
-            });
+        function drawMetroPath(ctx, x1, y1, x2, y2, r, offset, goHorizontalFirst) {
+            const ox1 = x1 + offset, oy1 = y1 + offset;
+            const ox2 = x2 + offset, oy2 = y2 + offset;
+            if (x1 === x2 || y1 === y2) { ctx.lineTo(ox2, oy2); return; }
+            if (goHorizontalFirst) ctx.arcTo(ox2, oy1, ox2, oy2, r);
+            else ctx.arcTo(ox1, oy2, ox2, oy2, r);
+            ctx.lineTo(ox2, oy2);
         }
 
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const w = canvas.width, h = canvas.height;
-            const lineGap = 6;
+            const w = 1200, h = 550;
+            const lineGap = 8;
+            const cornerRadius = 25;
 
-            // Individuelle Verlängerung zur Entzerrung der Startnummern
-            const getExtension = (lid) => lid === "8080" ? 80 : 40;
-
-            // 1. Linienstriche zeichnen
+            // Lines
             activeData.lines.forEach(line => {
-                const col = lineColors[line.id] || '#fff';
-                ctx.strokeStyle = col;
-                ctx.lineWidth = 4;
-                ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+                const col = getLineColor(line);
+                ctx.strokeStyle = col; ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+                const offsetVal = (lineOrder.indexOf(line.id) - (lineOrder.length - 1) / 2) * lineGap;
 
-                const segments = getAugmentedSegments(line);
-
-                segments.forEach((seg, i) => {
-                    const p1 = coordinateMap[seg.from];
-                    const p2 = coordinateMap[seg.to];
-                    if (!p1 || !p2) return;
-
-                    const shared = getParallelLinesOnSegment(seg.from, seg.to);
-                    const lineIdx = shared.findIndex(l => l.id === line.id);
-                    const totalShared = shared.length;
-                    const offsetVal = (lineIdx - (totalShared - 1) / 2) * lineGap;
-
-                    const dx = (p2.x - p1.x) * w;
-                    const dy = (p2.y - p1.y) * h;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist === 0) return;
-
-                    const nx = -dy / dist;
-                    const ny = dx / dist;
-
-                    let xStart = p1.x * w + nx * offsetVal;
-                    let yStart = p1.y * h + ny * offsetVal;
-                    let xEnd = p2.x * w + nx * offsetVal;
-                    let yEnd = p2.y * h + ny * offsetVal;
-
-                    if (i === 0 && seg.from === line.stations[0]) {
-                        const vx = -(dx / dist);
-                        const vy = -(dy / dist);
-                        xStart += vx * getExtension(line.id);
-                        yStart += vy * getExtension(line.id);
-                    }
+                for (let i = 0; i < line.stations.length - 1; i++) {
+                    const s1Id = line.stations[i], s2Id = line.stations[i + 1];
+                    const p1 = coordinateMap[s1Id], p2 = coordinateMap[s2Id];
+                    if (!p1 || !p2) continue;
+                    const x1 = p1.x * w, y1 = p1.y * h, x2 = p2.x * w, y2 = p2.y * h;
 
                     ctx.beginPath();
-                    ctx.moveTo(xStart, yStart);
-                    ctx.lineTo(xEnd, yEnd);
+                    if (i === 0) {
+                        const ext = line.id === "8080" ? 110 : line.id === "1024" ? 75 : 40;
+                        ctx.moveTo(x1 + offsetVal, y1 + offsetVal - ext);
+                        ctx.lineTo(x1 + offsetVal, y1 + offsetVal);
+                    } else {
+                        ctx.moveTo(x1 + offsetVal, y1 + offsetVal);
+                    }
+                    const isSpecial = line.id === "1024" && s1Id === "supersonic-steig" && s2Id === "topic-tor";
+                    drawMetroPath(ctx, x1, y1, x2, y2, cornerRadius, offsetVal, isSpecial);
                     ctx.stroke();
-                });
+                }
             });
 
-            // 2. Liniennummern (Boxen) zeichnen
+            // Start-Boxen
             activeData.lines.forEach(line => {
-                const col = lineColors[line.id] || '#fff';
-                const firstSId = line.stations[0];
-                const secondSId = line.stations[1];
-                const p1 = coordinateMap[firstSId];
-                const p2 = coordinateMap[secondSId];
-                if (!p1 || !p2) return;
+                const col = getLineColor(line);
+                const p1 = coordinateMap[line.stations[0]];
+                if (!p1) return;
+                const offsetVal = (lineOrder.indexOf(line.id) - (lineOrder.length - 1) / 2) * lineGap;
+                const ext = line.id === "8080" ? 110 : line.id === "1024" ? 75 : 40;
+                const tipX = p1.x * w + offsetVal, tipY = p1.y * h + offsetVal - ext;
 
-                const shared = getParallelLinesOnSegment(firstSId, secondSId);
-                const lineIdx = shared.findIndex(l => l.id === line.id);
-                const totalShared = shared.length;
-                const offsetVal = (lineIdx - (totalShared - 1) / 2) * lineGap;
-
-                const dx = (p2.x - p1.x) * w;
-                const dy = (p2.y - p1.y) * h;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-                const nx = -dy / dist;
-                const ny = dx / dist;
-
-                const xBase = p1.x * w + nx * offsetVal;
-                const yBase = p1.y * h + ny * offsetVal;
-
-                const vx = -(dx / dist);
-                const vy = -(dy / dist);
-                const tipX = xBase + vx * getExtension(line.id);
-                const tipY = yBase + vy * getExtension(line.id);
-
-                ctx.save();
-                ctx.font = 'bold 11px Space Grotesk';
-                const idText = line.id;
-                const idWidth = ctx.measureText(idText).width;
-                const bPadding = 5;
-                const bW = idWidth + bPadding * 2;
-                const bH = 16;
-                const bX = tipX - bW / 2;
-                const bY = tipY - bH / 2;
-
-                ctx.fillStyle = '#050810';
-                ctx.strokeStyle = col;
-                ctx.lineWidth = 1.5;
-                fillRoundRect(bX, bY, bW, bH, 3);
-
-                ctx.fillStyle = '#fff';
-                ctx.textAlign = 'center';
-                ctx.fillText(idText, tipX, tipY + 4);
-                ctx.restore();
+                ctx.save(); ctx.font = 'bold 11px Space Grotesk';
+                const bW = ctx.measureText(line.id).width + 10;
+                ctx.fillStyle = '#050810'; ctx.strokeStyle = col; ctx.lineWidth = 1.5;
+                fillRoundRect(tipX - bW / 2, tipY - 8, bW, 16, 3);
+                ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.fillText(line.id, tipX, tipY + 4); ctx.restore();
             });
 
-            // 3. Stationen zeichnen
+            // Station Circles & Labels
             activeData.stations.forEach(s => {
                 const pos = coordinateMap[s.id];
                 if (!pos) return;
                 const px = pos.x * w, py = pos.y * h;
                 const isHovered = s.id === hoveredStationId;
+                if (isHovered) { ctx.shadowBlur = 15; ctx.shadowColor = 'rgba(255, 255, 255, 0.8)'; }
 
-                if (isHovered) {
-                    ctx.shadowBlur = 15;
-                    ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
-                }
-
-                ctx.beginPath();
-                ctx.arc(px, py, 14, 0, Math.PI * 2);
-                ctx.fillStyle = '#050810'; ctx.fill();
-                ctx.strokeStyle = isHovered ? '#fff' : 'rgba(255,255,255,0.7)';
-                ctx.lineWidth = isHovered ? 2 : 1.2;
-                ctx.stroke();
-
-                ctx.beginPath();
-                ctx.arc(px, py, 5, 0, Math.PI * 2);
+                ctx.beginPath(); ctx.arc(px, py, 14, 0, Math.PI * 2);
+                ctx.fillStyle = '#050810'; ctx.fill(); ctx.strokeStyle = isHovered ? '#fff' : 'rgba(255,255,255,0.7)';
+                ctx.lineWidth = 1; ctx.stroke();
+                ctx.beginPath(); ctx.arc(px, py, 5, 0, Math.PI * 2);
                 ctx.fillStyle = '#fff'; ctx.fill();
 
+                const match = s.title.match(/^(.*)\s(\(.*\))$/);
+                let labelLines = match ? [match[1], match[2]] : [s.title];
                 ctx.font = '600 11px Plus Jakarta Sans';
-                const textWidth = ctx.measureText(s.title).width;
-                const boxW = textWidth + 14;
-                const boxH = 18;
-                const boxX = px - boxW / 2;
-                const boxY = py + 22;
+                let maxW = 0; labelLines.forEach(l => { maxW = Math.max(maxW, ctx.measureText(l).width); });
 
-                ctx.fillStyle = '#050810';
-                ctx.strokeStyle = isHovered ? '#fff' : 'rgba(255,255,255,0.4)';
-                ctx.lineWidth = 1;
-                fillRoundRect(boxX, boxY, boxW, boxH, 4);
+                const boxW = maxW + 16, boxH = labelLines.length * 14 + 10, boxY = py + 22;
+                ctx.fillStyle = '#050810'; ctx.strokeStyle = isHovered ? '#fff' : 'rgba(255,255,255,0.4)';
+                ctx.lineWidth = 1; fillRoundRect(px - boxW / 2, boxY, boxW, boxH, 4);
 
-                ctx.fillStyle = isHovered ? '#fff' : '#f8fafc';
-                ctx.textAlign = 'center';
-                ctx.fillText(s.title, px, boxY + 12.5);
+                ctx.fillStyle = isHovered ? '#fff' : '#f8fafc'; ctx.textAlign = 'center';
+                labelLines.forEach((text, idx) => {
+                    if (idx === 1) { ctx.font = '400 10px Plus Jakarta Sans'; ctx.fillStyle = isHovered ? '#fff' : '#94a3b8'; }
+                    ctx.fillText(text, px, boxY + 14 + (idx * 14));
+                });
                 ctx.shadowBlur = 0;
             });
         }
 
-        function getMousePos(e) {
+        function getStationAtPos(ex, ey) {
             const rect = canvas.getBoundingClientRect();
-            return {
-                x: (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left,
-                y: (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top
-            };
-        }
-
-        function getStationAtPos(pos) {
-            const w = canvas.width, h = canvas.height;
+            const x = (ex - rect.left) / zoomScale, y = (ey - rect.top) / zoomScale;
             for (const s of activeData.stations) {
                 const c = coordinateMap[s.id];
                 if (!c) continue;
-                const px = c.x * w, py = c.y * h;
-                const distToCircle = Math.sqrt(Math.pow(pos.x - px, 2) + Math.pow(pos.y - py, 2));
-                ctx.font = '600 11px "Plus Jakarta Sans"';
-                const textWidth = ctx.measureText(s.title).width;
-                const boxW = textWidth + 14;
-                const inCompositeArea = pos.x >= (px - boxW / 2) && pos.x <= (px + boxW / 2) && pos.y >= py && pos.y <= py + 40;
-                if (distToCircle < 20 || inCompositeArea) return s;
+                const px = c.x * 1200, py = c.y * 550;
+                const dist = Math.sqrt(Math.pow(x - px, 2) + Math.pow(y - py, 2));
+                if (dist < 20 || (x > px - 70 && x < px + 70 && y > py + 20 && y < py + 80)) return s;
             }
             return null;
         }
 
-        function handleMouseMove(e) {
-            const pos = getMousePos(e);
-            const s = getStationAtPos(pos);
+        canvas.addEventListener('mousemove', (e) => {
+            const s = getStationAtPos(e.clientX, e.clientY);
             if (s) {
-                if (hoveredStationId !== s.id) {
-                    hoveredStationId = s.id;
-                    canvas.style.cursor = 'pointer';
-                    draw();
-                }
-                tooltip.style.left = (e.clientX + 15) + 'px';
-                tooltip.style.top = (e.clientY + 15) + 'px';
+                if (hoveredStationId !== s.id) { hoveredStationId = s.id; canvas.style.cursor = 'pointer'; draw(); }
+                tooltip.style.left = (e.clientX + 15) + 'px'; tooltip.style.top = (e.clientY + 15) + 'px';
                 tooltip.style.display = 'block';
             } else {
-                if (hoveredStationId !== null) {
-                    hoveredStationId = null;
-                    canvas.style.cursor = 'default';
-                    tooltip.style.display = 'none';
-                    draw();
-                }
+                if (hoveredStationId !== null) { hoveredStationId = null; canvas.style.cursor = 'default'; tooltip.style.display = 'none'; draw(); }
             }
-        }
-
-        function handleInteraction(e) {
-            const pos = getMousePos(e);
-            const s = getStationAtPos(pos);
-            if (s) {
-                modalBody.innerHTML = `
-                    <div class="grid grid-cols-1 md:grid-cols-[1.5fr_1fr] max-h-[85vh]">
-                        <div class="p-10 md:p-12 border-r border-white/10 border-r-atv overflow-y-auto max-h-[85vh]">
-                            <h1 class="popup-header-title">${s.subtitle}</h1>
-                            <div class="popup-description">
-                                <p>${s.description}</p>
-                            </div>
-                        </div>
-                        <div class="popup-visual-container">
-                            <div class="relative flex flex-col items-center">
-                                <div class="w-16 h-16 rounded-full border-4 border-white/70 bg-[#050810] flex items-center justify-center shadow-[0_0_20px_rgba(255,255,255,0.1)]">
-                                    <div class="w-4 h-4 rounded-full bg-white"></div>
-                                </div>
-                                <div class="mt-6 px-4 py-2 bg-[#050810] border border-white/20 rounded-lg shadow-lg">
-                                    <span class="text-white font-semibold text-sm tracking-tight">${s.title}</span>
-                                </div>
-                                <div class="mt-12">
-                                    <button onclick="sendInterestEmail('${s.title}', '${s.subtitle}')" class="atv-btn py-3 px-8 text-[11px] whitespace-nowrap">
-                                        Das interessiert mich <i class="fa-solid fa-chevron-right ml-2 text-[9px]"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                toggleModal(true);
-                tooltip.style.display = 'none';
-            }
-        }
-
-        function toggleModal(show) {
-            document.getElementById('detailModal').style.display = show ? 'flex' : 'none';
-            document.body.style.overflow = show ? 'hidden' : 'auto';
-        }
-        function closeModal(e) { if (e.target.id === 'detailModal') toggleModal(false); }
-
-        window.addEventListener('resize', resize);
-        canvas.addEventListener('mousemove', handleMouseMove);
-        canvas.addEventListener('mousedown', handleInteraction);
-        canvas.addEventListener('touchstart', (e) => {
-            const pos = getMousePos(e);
-            const s = getStationAtPos(pos);
-            if (s) { e.preventDefault(); handleInteraction(e); }
         });
 
+        canvas.addEventListener('mousedown', (e) => {
+            const s = getStationAtPos(e.clientX, e.clientY);
+            if (s) {
+                modalBody.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-[1.5fr_1fr] h-full overflow-hidden">
+                        <div class="p-10 md:p-12 border-r border-white/10 overflow-y-auto">
+                            <h1 class="popup-header-title">${s.title}</h1>
+                            <div class="popup-subtitle">${s.subtitle}</div>
+                            <div class="popup-description"><p>${s.description}</p></div>
+                        </div>
+                        <div class="popup-visual-container flex flex-col items-center justify-center bg-[#020617] h-full">
+                            <div class="w-16 h-16 rounded-full border-4 border-white/70 bg-[#050810] flex items-center justify-center shadow-2xl mb-6">
+                                <div class="w-4 h-4 rounded-full bg-white"></div>
+                            </div>
+                            <div class="px-6 py-2 bg-[#050810] border border-white/20 rounded-lg shadow-lg text-center mb-12">
+                                <span class="text-white font-semibold text-sm tracking-tight block">${s.title.replace(' (', '<br><span class="text-[10px] font-normal opacity-70">(')}</span>
+                            </div>
+                            <button onclick="sendInterestEmail('${s.title}', '${s.subtitle}')" class="atv-btn py-3 px-8 text-[11px] whitespace-nowrap">Das interessiert mich <i class="fa-solid fa-chevron-right ml-2 text-[9px]"></i></button>
+                        </div>
+                    </div>`;
+                toggleModal(true);
+            }
+        });
+
+        function sendConsultationEmail() {
+            window.location.href = `mailto:competence-center@atvantage.com?subject=Anfrage: Cloud-Native Beratung&body=Ich interessiere mich für eine individuelle Beratung zum Trainingsfahrplan.`;
+        }
+
+        function sendInterestEmail(stationTitle, subtitle) {
+            window.location.href = `mailto:competence-center@atvantage.com?subject=Interesse an ${subtitle}&body=Ich interessiere mich für den Kurs "${subtitle}" (Haltestelle: ${stationTitle}). Bitte senden Sie mir Details.`;
+        }
+
+        function toggleModal(show) { modal.style.display = show ? 'flex' : 'none'; document.body.style.overflow = show ? 'hidden' : 'auto'; }
+        function closeModal(e) { if (e.target.id === 'detailModal') toggleModal(false); }
+
+        window.addEventListener('resize', () => { autoFit(); });
         window.onload = initData;
     </script>
 </body>
