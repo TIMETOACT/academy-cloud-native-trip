@@ -1,4 +1,5 @@
 {
+    "$schema": "./lines.schema.json",
     "stations": [
         {
             "id": "pipeline-platz",
@@ -81,6 +82,7 @@
         {
             "id": "8080",
             "name": "Backend Developer (Spring)",
+            "color": "#6DB33F",
             "stations": [
                 "api-allee",
                 "springfield-ortseingang",
@@ -92,6 +94,7 @@
         {
             "id": "1024",
             "name": "Backend Developer (Quarkus)",
+            "color": "#4695EB",
             "stations": [
                 "api-allee",
                 "supersonic-steig",
@@ -102,6 +105,7 @@
         {
             "id": "1010",
             "name": "Frontend Developer",
+            "color": "#E40035",
             "stations": [
                 "api-allee",
                 "ng-zone",
