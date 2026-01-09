@@ -1,0 +1,121 @@
+{
+    "stations": [
+        {
+            "id": "pipeline-platz",
+            "title": "Pipeline-Platz",
+            "subtitle": "DevOps – Spirit, Werkzeuge und Infrastruktur",
+            "description": "Lerne die Grundlagen von DevOps, CI/CD und Cloud-Native-Entwicklung – praxisnah mit den Tools und Prozessen der HUK. In einem durchgängigen Beispielprojekt (Frontend/Backend) baust du eine CI/CD-Pipeline vom Quellcode zum gebauten Artefakt auf. Ideal für Entwickler, die moderne Build-Prozesse verstehen und anwenden wollen. Mit Fokus auf Git, Maven/NPM, Jenkins und Nexus."
+        },
+        {
+            "id": "api-allee",
+            "title": "API-Allee",
+            "subtitle": "Design von RESTful APIs",
+            "description": "Tauche in die Grundlagen moderner REST-APIs ein – von den Prinzipien bis zur Praxis. Du lernst, REST-konforme Schnittstellen im Kontext von Microservices zu designen und mit OpenAPI zu dokumentieren. Dabei berücksichtigen wir auch die REST-Guidelines und Architekturvorgaben der HUK. Ideal für Entwickler, die saubere, wartbare und zukunftsfähige APIs erstellen wollen."
+        },
+        {
+            "id": "lambda-lane",
+            "title": "Lambda-Lane (über Garbage-Gasse)",
+            "subtitle": "Java-Vertiefung",
+            "description": "In den weiterführenden Entwickler-Kursen ist es wichtig, dass Du die Sprachgrundlagen beherrschst. Dieser Kurs findet sehr individuell statt, abhängig von den Anwesenden. So können Java-Grundlagen aufgefrischt, spezielle (oft problematische) Sprach-Features geübt und weiterführende Konzepte bzw. Funktionen kennengelernt werden. Das Ziel des Kurses ist, für die anstehenden Kurse (Spring Boot, Quarkus) fit zu sein."
+        },
+        {
+            "id": "mockstadt",
+            "title": "Mockstadt (am Testfalltor)",
+            "subtitle": "Java – Automatisierte Tests",
+            "description": "Gute Tests sind das Rückgrat stabiler Software – besonders in CI/CD-Pipelines. In diesem Modul lernst du, mit JUnit, Mockito, AssertJ und Cucumber aussagekräftige, wartbare Tests zu schreiben. Du verstehst die Testpyramide, übst Test Driven Development und entwickelst praxisnah eigene Testfälle. Ideal für Java-Entwickler, die Qualität systematisch sichern wollen. Auch dieser Kurs ist vorbereitend auf Spring-Boot- bzw. Quarkus-Seminare."
+        },
+        {
+            "id": "springfield-ortseingang",
+            "title": "Springfield (Ortseingang)",
+            "subtitle": "Spring Boot – Grundlagen mit REST & JPA",
+            "description": "In diesem praxisnahen Modul entwickelst Du mit Spring Boot eine vollständige REST-API – inklusive Datenbankanbindung mit JPA. Die Entwicklung erfolgt dabei weitestgehend Test-Driven. Du lernst die Kernkonzepte von Spring Web MVC kennen, strukturierst sauberen Code in einer Schichtenarchitektur und berücksichtigst die Anforderungen an Cloud-Native-Anwendungen."
+        },
+        {
+            "id": "springfield-clean-code-kreuz",
+            "title": "Springfield (Clean-Code-Kreuz)",
+            "subtitle": "Spring Boot – Vertiefung",
+            "description": "In diesem Modul vertiefst du deine Spring-Boot-Kenntnisse und optimierst Deinen Code nach Clean-Code-Prinzipien. Du lernst die Fallstricke bei der Implementierung von Spring-Boot-Tests sowie moderne Konzepte wie Events und AOP gezielt einzusetzen."
+        },
+        {
+            "id": "supersonic-steig",
+            "title": "Supersonic-Steig (Am DevMode-Dock)",
+            "subtitle": "Quarkus – Grundlagen mit REST und JPA",
+            "description": "In diesem praxisorientierten Modul baust Du mit Quarkus eine vollständige REST-API – inklusive nahtloser Datenbankintegration über JPA. Die Umsetzung erfolgt dabei überwiegend testgetrieben. Du berücksichtigst die Prinzipien von Cloud-Native-Anwendungen."
+        },
+        {
+            "id": "topic-tor",
+            "title": "Zum Topic-Tor",
+            "subtitle": "Event-basierte Kommunikation mit Kafka",
+            "description": "Entdecke, wie Microservices effizient über Kafka kommunizieren. Du lernst die Konzepte von Kafka und die Konsequenzen für das Design des Nachrichtenversands sowie die Fehlerbehandlung. Der Kurs ist für Spring-Boot- sowie Quarkus-Entwickler verfügbar."
+        },
+        {
+            "id": "docker-dock",
+            "title": "Am Docker-Dock",
+            "subtitle": "Grundlagen: Docker-Container für Entwickler",
+            "description": "Hier lernst Du die Grundlagen der Containerisierung und von Docker kennen. Du erörterst den Mehrwert von Containern in modernen DevOps-Umgebungen. In den Übungen baust Du eigene Images und integrierst sie in CI/CD-Pipelines."
+        },
+        {
+            "id": "podstetten",
+            "title": "Podstetten (Containerhof)",
+            "subtitle": "Kubernetes und OpenShift für Entwickler",
+            "description": "Lerne, Anwendungscontainer in OpenShift zu deployen – praxisnah in der HUK-Umgebung. Du lernst die wichtigsten Kubernetes-Ressourcen kennen und baust automatisierte CI/CD-Pipelines."
+        },
+        {
+            "id": "ng-zone",
+            "title": "NG-Zone",
+            "subtitle": "Angular-Grundlagen",
+            "description": "In diesem Seminar lernst du die Grundlagen von Typescript, NPM und Angular kennen. Du entwickelst eigene Komponenten, nutzt Datenbindung, Services, RxJS und automatisierte Tests."
+        }
+    ],
+    "lines": [
+        {
+            "id": "42",
+            "name": "DevOps-Grundlagen",
+            "stations": [
+                "pipeline-platz",
+                "api-allee",
+                "docker-dock",
+                "podstetten"
+            ]
+        },
+        {
+            "id": "8080",
+            "name": "Backend Developer (Spring)",
+            "stations": [
+                "api-allee",
+                "springfield-ortseingang",
+                "springfield-clean-code-kreuz",
+                "topic-tor",
+                "docker-dock"
+            ]
+        },
+        {
+            "id": "1024",
+            "name": "Backend Developer (Quarkus)",
+            "stations": [
+                "api-allee",
+                "supersonic-steig",
+                "topic-tor",
+                "docker-dock"
+            ]
+        },
+        {
+            "id": "1010",
+            "name": "Frontend Developer",
+            "stations": [
+                "api-allee",
+                "ng-zone",
+                "docker-dock"
+            ]
+        },
+        {
+            "id": "1337",
+            "name": "Java-Auffrischung",
+            "stations": [
+                "lambda-lane",
+                "mockstadt",
+                "api-allee"
+            ]
+        },
+    ]
+}
