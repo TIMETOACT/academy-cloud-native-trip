@@ -476,7 +476,7 @@
 
         <div class="print-footer">
             <p class="font-bold text-lg mb-1">Du hast Fragen oder suchst eine individuelle Schulung?</p>
-            <p class="text-orange-600 font-bold text-xl mb-4">competence-center@atvantage.com</p>
+            <p id="print-email-target" class="text-orange-600 font-bold text-xl mb-4"></p>
             <p class="text-gray-400 text-sm">© atvantage - Cloud-Native Journey</p>
         </div>
     </div>
@@ -489,6 +489,11 @@
     </div>
 
     <script>
+        // --- E-MAIL SCHUTZ CONFIG ---
+        const _u = "competence-center";
+        const _d = "atvantage.com";
+        const getFullEmail = () => _u + "@" + _d;
+
         // --- DATA ---
         const fallbackData = {
             "stations": [
@@ -595,7 +600,7 @@
             handleHash();
         }
 
-        // --- SICHERES ANCHOR HANDLING ---
+        // --- ANCHOR HANDLING ---
         function safeUpdateHash(newHash) {
             try {
                 if (newHash === '') {
@@ -635,7 +640,7 @@
 
         // --- DRUCKANSICHT GENERIEREN ---
         function renderPrintView() {
-            // 1. Map Capture (Statischer Export)
+            // 1. Map Capture
             draw();
             const mapImage = document.getElementById('print-map-image');
             mapImage.src = canvas.toDataURL("image/png");
@@ -649,6 +654,9 @@
                     <div class="print-station-desc">${s.description}</div>
                 </div>
             `).join('');
+
+            // 3. E-Mail dynamisch einfügen
+            document.getElementById('print-email-target').textContent = getFullEmail();
         }
 
         // --- BOOKMARKS & MODAL ---
@@ -759,7 +767,6 @@
         viewport.addEventListener('touchend', () => { isDown = false; initialPinchDist = 0; });
         viewport.addEventListener('wheel', (e) => { if (e.ctrlKey) { e.preventDefault(); updateZoom(zoomScale * (1 - e.deltaY * 0.005)); } }, { passive: false });
 
-        // Safari Gesture Support
         viewport.addEventListener('gesturestart', (e) => { e.preventDefault(); }, { passive: false });
         viewport.addEventListener('gesturechange', (e) => { e.preventDefault(); updateZoom(zoomScale * e.scale); }, { passive: false });
 
@@ -828,7 +835,7 @@
                 ctx.beginPath(); ctx.arc(px, py, 5, 0, Math.PI * 2); ctx.fillStyle = '#fff'; ctx.fill();
                 const match = s.title.match(/^(.*)\s(\(.*\))$/), lbl = match ? [match[1], match[2]] : [s.title];
                 ctx.font = '600 11px Plus Jakarta Sans'; let mw = 0; lbl.forEach(l => mw = Math.max(mw, ctx.measureText(l).width));
-                const bxW = mw + 16, bxH = lbl.length * 14 + 10, bxY = py + 22; ctx.fillStyle = '#050810'; ctx.strokeStyle = isH ? '#fff' : 'rgba(255,255,255,0.4)'; fillRoundRect(px - bxW / 2, bxY, bxW, bxH, 4); ctx.fillStyle = isH ? '#fff' : '#f8fafc'; ctx.textAlign = 'center'; lbl.forEach((t, i) => { if (i === 1) { ctx.font = '400 10px Plus Jakarta Sans'; ctx.fillStyle = isH ? '#fff' : '#94a3b8'; } ctx.fillText(t, px, bxY + 14 + (i * 14)); });
+                const bxW = mw + 16, bxH = lbl.length * 14 + 10, bxY = py + 22; ctx.fillStyle = '#050810'; ctx.strokeStyle = isH ? '#fff' : 'rgba(255,255,255,0.4)'; fillRoundRect(px - bxW / 2, bxY, bxW, bxH, 4); ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; lbl.forEach((t, i) => { if (i === 1) { ctx.font = '400 10px Plus Jakarta Sans'; ctx.fillStyle = isH ? '#fff' : '#94a3b8'; } ctx.fillText(t, px, bxY + 14 + (i * 14)); });
                 ctx.shadowBlur = 0;
             });
         }
@@ -845,8 +852,14 @@
 
         function renderLegend() { document.getElementById('legend-container').innerHTML = activeData.lines.map(line => { const color = getLineColor(line.id); return `<div class="flex items-center"><div class="px-2 py-0.5 rounded border text-[11px] font-bold z-10" style="background-color:#050810; border-color:${color}; color:#fff; min-width:28px; text-align:center;">${line.id}</div><div class="h-1 w-6 -ml-px" style="background-color:${color};"></div><span class="ml-3 text-slate-300 tracking-tight normal-case font-medium">${line.name}</span></div>`; }).join(''); }
 
-        function sendConsultationEmail() { window.location.href = `mailto:competence-center@atvantage.com?subject=Anfrage&body=Ich interessiere mich für eine individuelle Beratung.`; }
-        function sendInterestEmail(t, s) { window.location.href = `mailto:competence-center@atvantage.com?subject=Interesse an ${s}&body=Ich interessiere mich für den Kurs "${s}" (Haltestelle: ${t}).`; }
+        function sendConsultationEmail() {
+            const email = getFullEmail();
+            window.location.href = `mailto:${email}?subject=Anfrage&body=Ich interessiere mich für eine individuelle Beratung.`;
+        }
+        function sendInterestEmail(t, s) {
+            const email = getFullEmail();
+            window.location.href = `mailto:${email}?subject=Interesse an ${s}&body=Ich interessiere mich für den Kurs "${s}" (Haltestelle: ${t}).`;
+        }
 
         window.addEventListener('resize', () => { if (!document.body.classList.contains('printing-active')) autoFit(); });
         window.onload = initData;
