@@ -28,7 +28,7 @@
             margin: 0;
         }
 
-        /* Fixierter, stark abgedunkelter Hintergrund */
+        /* Fixierter Hintergrund */
         #site-bg {
             position: fixed;
             top: 0;
@@ -48,7 +48,7 @@
             font-family: 'Space Grotesk', sans-serif;
         }
 
-        /* Titelseite - Dezentere Typografie */
+        /* Titelseite */
         .hero-title {
             font-weight: 200;
             font-size: clamp(1.6rem, 4vw, 2.5rem);
@@ -66,7 +66,7 @@
             opacity: 0.9;
         }
 
-        /* Oranger Button */
+        /* Button Styling */
         .atv-btn {
             background-color: var(--atv-orange);
             color: white;
@@ -96,13 +96,13 @@
         #map-container {
             position: relative;
             width: 100%;
-            max-width: 1000px;
-            height: 48vh;
-            /* Vertikal zusammengerückt */
+            max-width: 1100px;
+            height: 50vh;
             background: transparent;
-            border: none;
+            margin: 0 auto;
         }
 
+        /* Tooltip */
         #canvas-tooltip {
             position: fixed;
             pointer-events: none;
@@ -119,13 +119,12 @@
             z-index: 500;
         }
 
-        /* Popup / Modal */
+        /* Popup */
         .modal {
             display: none;
             position: fixed;
             inset: 0;
             background: rgba(0, 0, 0, 0.6);
-            /* Dezent abgedunkelt */
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             z-index: 1000;
@@ -137,12 +136,12 @@
         .modal-content {
             background: #0f172a;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 2.5rem;
+            padding: 0;
             border-radius: 1.25rem;
-            max-width: 700px;
+            max-width: 950px;
             width: 100%;
             max-height: 85vh;
-            overflow-y: auto;
+            overflow: hidden;
             position: relative;
             box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8);
         }
@@ -154,6 +153,7 @@
             color: #94a3b8;
             cursor: pointer;
             font-size: 1.5rem;
+            z-index: 50;
             transition: color 0.2s;
         }
 
@@ -161,65 +161,59 @@
             color: #fff;
         }
 
-        /* Wiederhergestellte Markdown Styles für das Popup */
-        #modal-body h1 {
-            font-size: 2.25rem;
+        /* Popup Content Styles */
+        .popup-header-title {
+            font-size: 2rem;
             font-weight: 700;
             color: var(--atv-orange);
-            margin-bottom: 1.25rem;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.05);
-            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
             font-family: 'Space Grotesk', sans-serif;
         }
 
-        #modal-body h2 {
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: #3b82f6;
-            margin-top: 1.75rem;
-            margin-bottom: 0.75rem;
-        }
-
-        #modal-body p {
+        .popup-description {
             color: #cbd5e1;
             font-size: 1.1rem;
             line-height: 1.7;
-            margin-bottom: 1rem;
         }
 
-        #modal-body ul {
-            margin-bottom: 1.5rem;
-        }
-
-        #modal-body li {
-            position: relative;
-            padding-left: 1.75rem;
-            margin-bottom: 0.5rem;
-            color: #94a3b8;
-            font-size: 1.1rem;
-        }
-
-        #modal-body li::before {
-            content: "→";
-            position: absolute;
-            left: 0;
-            color: var(--atv-orange);
-            font-weight: bold;
+        .popup-visual-container {
+            background: #050810;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 2rem;
+            height: 100%;
         }
 
         /* Taxi Hinweis Box */
         .taxi-note {
-            max-width: 800px;
-            margin: 1.5rem auto 0;
+            max-width: 850px;
+            margin: 4rem auto 0;
             padding: 1.25rem 2rem;
             border-left: 3px solid var(--atv-orange);
-            background: rgba(249, 115, 22, 0.05);
-            border-top: 1px solid rgba(249, 115, 22, 0.1);
-            border-bottom: 1px solid rgba(249, 115, 22, 0.1);
-            border-right: 1px solid rgba(249, 115, 22, 0.1);
+            background: rgba(249, 115, 22, 0.04);
+            border: 1px solid rgba(249, 115, 22, 0.1);
+            border-left-width: 3px;
             color: #f8fafc;
             font-size: 0.9rem;
             border-radius: 0.4rem 1.2rem 1.2rem 0.4rem;
+        }
+
+        @media (max-width: 768px) {
+            .modal-content {
+                overflow-y: auto;
+            }
+
+            .border-r-atv {
+                border-right: none !important;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .popup-visual-container {
+                padding: 3rem 1rem;
+            }
         }
     </style>
 </head>
@@ -233,13 +227,12 @@
     <section class="h-screen flex flex-col items-center justify-center text-center p-6">
         <p class="hero-subtitle mb-3">atvantage präsentiert</p>
         <h1 class="hero-title mb-1">Cloud-Native-Entwicklung</h1>
-        <p class="text-lg md:text-xl font-light text-slate-400 mb-6 italic">Mit der U-Bahn 🚊 in die Wolken ✈️☁️</p>
+        <p class="text-lg md:text-xl font-light text-slate-400 mb-10 italic">Mit der U-Bahn 🚊 in die Wolken ✈️☁️</p>
 
-        <div class="max-w-xl text-slate-400 font-light leading-relaxed mb-8 text-base px-4 opacity-90">
+        <div class="max-w-xl text-slate-400 font-light leading-relaxed mb-10 text-base px-4 opacity-90">
             <p class="mb-4 text-slate-300">Willkommen an Board auf Deiner individuellen Reise in die Welt der
                 Cloud-Native-Entwicklung.</p>
-            <p>Wähle die für Dich passende Verbindung. Jede Station hält neue Impulse bereit. Du entscheidest, wo Du
-                einsteigen möchtest.</p>
+            <p>Wähle die für Dich passende Verbindung. Jede Station hält neue Impulse bereit.</p>
         </div>
 
         <a href="#map-section" class="atv-btn">
@@ -248,25 +241,15 @@
     </section>
 
     <!-- Seite 2: Liniennetz -->
-    <section id="map-section" class="min-h-screen flex flex-col items-center justify-center p-6">
+    <section id="map-section" class="min-h-screen flex flex-col items-center justify-start pt-8 pb-4 px-4">
         <div class="text-center mb-4">
             <h2 class="text-3xl font-light mb-1 tracking-tight">Liniennetz</h2>
-            <p class="text-slate-500 uppercase tracking-widest text-[9px] font-semibold mb-6">Interaktive
+            <p class="text-slate-500 uppercase tracking-widest text-[9px] font-semibold mb-4">Interaktive
                 Haltestellenübersicht</p>
 
-            <div class="flex flex-wrap justify-center gap-6 opacity-60 text-[9px] uppercase tracking-widest font-bold">
-                <div class="flex items-center gap-3"><span
-                        class="w-5 h-1 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]"></span> Linie 42:
-                    Frontend & API</div>
-                <div class="flex items-center gap-3"><span
-                        class="w-5 h-1 rounded-full bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.5)]"></span> Linie
-                    1010: Java & Spring</div>
-                <div class="flex items-center gap-3"><span
-                        class="w-5 h-1 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span> Linie
-                    1337: Deep Dive</div>
-                <div class="flex items-center gap-3"><span
-                        class="w-5 h-1 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.5)]"></span> Linie
-                    8080: Infrastructure</div>
+            <div id="legend-container"
+                class="flex flex-wrap justify-center gap-x-8 gap-y-4 opacity-90 text-[11px] uppercase tracking-widest font-bold mb-6">
+                <!-- Wird per JS dynamisch gefüllt -->
             </div>
         </div>
 
@@ -276,11 +259,10 @@
 
         <div class="taxi-note">
             <div class="flex flex-col md:flex-row items-center gap-6">
-                <i class="fa-solid fa-taxi text-3xl text-orange-500/70"></i>
+                <i class="fa-solid fa-taxi text-2xl text-orange-500/70"></i>
                 <div class="flex-1 text-center md:text-left">
                     <p class="mb-1 leading-relaxed">Nicht die passende Station gefunden? Unser
                         <strong>Individual-Schulungs-Taxi</strong> bringt Dich direkt an Deine Adresse.</p>
-                    <p class="text-slate-400 text-xs">Melde Dich bei uns für eine maßgeschneiderte Weiterbildung.</p>
                 </div>
                 <button onclick="sendConsultationEmail()" class="atv-btn py-2 px-6 text-[10px]">
                     Beratung anfragen <i class="fa-solid fa-paper-plane ml-2 text-[8px]"></i>
@@ -298,148 +280,93 @@
     </div>
 
     <script>
+        // --- DATEN ---
+        const fallbackData = {
+            "stations": [
+                { "id": "pipeline-platz", "title": "Pipeline-Platz", "subtitle": "DevOps – Spirit und Tools", "description": "Lerne die Grundlagen von DevOps, CI/CD und Cloud-Native-Entwicklung praxisnah mit Git, Maven/NPM, Jenkins und Nexus." },
+                { "id": "api-allee", "title": "API-Allee", "subtitle": "Design von RESTful APIs", "description": "Tauche in die Grundlagen moderner REST-APIs ein – von den Prinzipien bis zur Dokumentation mit OpenAPI." },
+                { "id": "lambda-lane", "title": "Lambda-Lane (über Garbage-Gasse)", "subtitle": "Java-Vertiefung", "description": "Auffrischung von Java-Grundlagen und Übung spezieller Sprach-Features für anstehende Framework-Kurse." },
+                { "id": "mockstadt", "title": "Mockstadt (am Testfalltor)", "subtitle": "Java – Automatisierte Tests", "description": "Lerne mit JUnit, Mockito und AssertJ aussagekräftige Tests zu schreiben und TDD anzuwenden." },
+                { "id": "springfield-ortseingang", "title": "Springfield (Ortseingang)", "subtitle": "Spring Boot Grundlagen", "description": "Entwickle REST-APIs mit Spring Web MVC und JPA inklusive Datenbankanbindung." },
+                { "id": "springfield-clean-code-kreuz", "title": "Springfield (Clean-Code-Kreuz)", "subtitle": "Spring Boot Vertiefung", "description": "Code-Optimierung nach Clean-Code-Prinzipien und Einsatz moderner Konzepte wie Events und AOP." },
+                { "id": "supersonic-steig", "title": "Supersonic-Steig (Am DevMode-Dock)", "subtitle": "Quarkus Grundlagen", "description": "Ressourceneffiziente Java-Entwicklung mit Quarkus und Native Compilation." },
+                { "id": "topic-tor", "title": "Zum Topic-Tor", "subtitle": "Kafka Kommunikation", "description": "Event-basierte Kommunikation zwischen Microservices mit Apache Kafka effizient gestalten." },
+                { "id": "docker-dock", "title": "Am Docker-Dock", "subtitle": "Docker Grundlagen", "description": "Grundlagen der Containerisierung und Integration von Images in CI/CD-Pipelines." },
+                { "id": "podstetten", "title": "Podstetten (Containerhof)", "subtitle": "Kubernetes & OpenShift", "description": "Container-Orchestrierung und Deployment in der HUK-spezifischen OpenShift-Umgebung." },
+                { "id": "ng-zone", "title": "NG-Zone", "subtitle": "Angular-Grundlagen", "description": "Moderne Frontend-Entwicklung mit TypeScript, Angular Komponenten, RxJS und automatisierten Tests." }
+            ],
+            "lines": [
+                { "id": "42", "name": "DevOps-Grundlagen", "stations": ["pipeline-platz", "api-allee", "docker-dock", "podstetten"] },
+                { "id": "8080", "name": "Backend Developer (Spring)", "stations": ["api-allee", "springfield-ortseingang", "springfield-clean-code-kreuz", "topic-tor", "docker-dock"] },
+                { "id": "1024", "name": "Backend Developer (Quarkus)", "stations": ["api-allee", "supersonic-steig", "topic-tor", "docker-dock"] },
+                { "id": "1010", "name": "Frontend Developer", "stations": ["api-allee", "ng-zone", "docker-dock"] },
+                { "id": "1337", "name": "Java-Auffrischung", "stations": ["lambda-lane", "mockstadt", "api-allee"] }
+            ]
+        };
+
+        const lineColors = { "42": "#3b82f6", "8080": "#a855f7", "1024": "#10b981", "1010": "#f97316", "1337": "#ec4899" };
+
+        // Optimierte Koordinaten zur Vermeidung von Linienüberschneidungen
+        const coordinateMap = {
+            "pipeline-platz": { x: 0.15, y: 0.3 },
+            "api-allee": { x: 0.35, y: 0.3 },
+            "ng-zone": { x: 0.55, y: 0.45 },
+            "docker-dock": { x: 0.75, y: 0.3 },
+            "podstetten": { x: 0.92, y: 0.3 },
+            "lambda-lane": { x: 0.15, y: 0.65 },
+            "mockstadt": { x: 0.35, y: 0.65 },
+            "springfield-ortseingang": { x: 0.48, y: 0.7 }, // Springfield weiter nach links/unten
+            "springfield-clean-code-kreuz": { x: 0.60, y: 0.7 },
+            "supersonic-steig": { x: 0.40, y: 0.9 }, // Quarkus Pfad deutlich separiert
+            "topic-tor": { x: 0.75, y: 0.55 } // Exakt unter Docker-Dock
+        };
+
+        let activeData = fallbackData;
         const canvas = document.getElementById('metroCanvas');
         const ctx = canvas.getContext('2d');
         const modal = document.getElementById('detailModal');
         const modalBody = document.getElementById('modal-body');
         const tooltip = document.getElementById('canvas-tooltip');
-
         let hoveredStationId = null;
 
-        // Eingebettete Markdown-Daten
-        const markdownData = `
-# Pipeline-Platz
-## Lernziele
-Verständnis von DevOps-Kultur und Automatisierung.
-## Inhalte
-- CI/CD Grundlagen
-- Build-Tools (Maven/NPM)
-- Automatisierung mit Jenkins & Nexus
-- Git Workflow
-
-# API-Allee
-## Lernziele
-Design und Dokumentation moderner Schnittstellen.
-## Inhalte
-- RESTful Prinzipien
-- Microservices Architektur
-- Dokumentation mit OpenAPI
-- API Guidelines
-
-# Lambda-Lane
-## Lernziele
-Sicherer Umgang mit Java-Sprachfeatures.
-## Inhalte
-- Java Sprachgrundlagen Auffrischung
-- Moderne Sprachfeatures
-- Vorbereitung auf Frameworks (Spring/Quarkus)
-
-# Mockstadt
-## Lernziele
-Systematische Qualitätssicherung im Code.
-## Inhalte
-- JUnit, Mockito, AssertJ
-- Testgetriebene Entwicklung (TDD)
-- Testpyramide & Best Practices
-
-# Springfield (Eingang)
-## Lernziele
-Development von Cloud-Native Services mit Spring Boot.
-## Inhalte
-- Spring Web MVC & JPA
-- Datenbankanbindung
-- Schichtenarchitektur
-- REST-API Implementierung
-
-# Springfield (Clean Code)
-## Lernziele
-Fortgeschrittene Architekturmuster und sauberer Code.
-## Inhalte
-- Clean Code Prinzipien
-- Spring Events & AOP
-- Fortgeschrittenes Testing
-
-# Supersonic-Steig
-## Lernziele
-Ressourceneffiziente Java-Entwicklung mit Quarkus.
-## Inhalte
-- Quarkus Grundlagen (REST & JPA)
-- Native Compilation
-- Developer Experience (DevMode)
-
-# Zum Topic-Tor
-## Lernziele
-Ereignisgesteuerte Kommunikation zwischen Diensten.
-## Inhalte
-- Apache Kafka Konzepte
-- Producer & Consumer Design
-- Fehlerbehandlung in Streams
-
-# Am Docker-Dock
-## Lernziele
-Anwendungen erfolgreich containerisieren.
-## Inhalte
-- Docker Grundlagen & Architektur
-- Erstellung schlanker Images
-- 12-Factor-App Konfiguration
-
-# Podstetten
-## Lernziele
-Orchestrierung von Containern in Produktivumgebungen.
-## Inhalte
-- Kubernetes & OpenShift Ressourcen
-- Deployment Strategien
-- Automatisierte Pipelines
-
-# NG-Zone
-## Lernziele
-Moderne Frontend-Entwicklung mit Angular.
-## Inhalte
-- TypeScript & NPM Grundlagen
-- Komponenten & Services
-- RxJS & State Management
-        `;
-
-        const stationsData = {};
-        function parseMarkdown() {
-            const sections = markdownData.split(/^# /m).filter(s => s.trim() !== "");
-            sections.forEach(section => {
-                const lines = section.split('\n');
-                const title = lines[0].trim();
-                stationsData[title] = "# " + section;
-            });
+        async function initData() {
+            try {
+                const response = await fetch('lines.json');
+                if (response.ok) activeData = await response.json();
+            } catch (e) { console.warn("Laden von lines.json fehlgeschlagen, nutze Fallback."); }
+            renderLegend();
+            resize();
         }
 
-        // Spam-Schutz & E-Mail Logik (dynamisch zusammengesetzt)
-        function sendConsultationEmail() {
-            const u = "competence-center";
-            const d = "atvantage.com";
-            const s = encodeURIComponent("Anfrage: Individuelle Cloud-Native Beratung");
-            const b = encodeURIComponent("Hallo Competence Center Team,\n\nich interessiere mich für eine individuelle Beratung zum Cloud-Native Trainingsfahrplan.\n\nBitte nehmen Sie Kontakt mit mir auf.\n\nMit freundlichen Grüßen");
+        function renderLegend() {
+            document.getElementById('legend-container').innerHTML = activeData.lines.map(line => {
+                const color = lineColors[line.id] || '#fff';
+                return `
+                <div class="flex items-center">
+                    <div class="px-2 py-0.5 rounded border text-[11px] font-bold z-10" 
+                         style="background-color: #050810; border-color: ${color}; color: #fff; min-width: 28px; text-align: center;">
+                        ${line.id}
+                    </div>
+                    <div class="h-1 w-6 -ml-px shadow-[0_0_8px_${color}44]" style="background-color: ${color};"></div>
+                    <span class="ml-3 text-slate-300 tracking-tight normal-case font-medium">${line.name}</span>
+                </div>
+                `;
+            }).join('');
+        }
 
+        function sendConsultationEmail() {
+            const u = "competence-center", d = "atvantage.com";
+            const s = encodeURIComponent("Anfrage: Individuelle Cloud-Native Beratung");
+            const b = encodeURIComponent("Hallo Competence Center Team,\n\nich interessiere mich für eine individuelle Beratung zum Cloud-Native Trainingsfahrplan.\n\nBitte nehmen Sie Kontakt mit mir auf.");
             window.location.href = `mailto:${u}@${d}?subject=${s}&body=${b}`;
         }
 
-        const stations = [
-            { id: 'pipeline', name: 'Pipeline-Platz', x: 0.15, y: 0.25, lines: ['42', '1010'] },
-            { id: 'api', name: 'API-Allee', x: 0.35, y: 0.25, lines: ['42', '1337'] },
-            { id: 'ngzone', name: 'NG-Zone', x: 0.55, y: 0.25, lines: ['42'] },
-            { id: 'lambda', name: 'Lambda-Lane', x: 0.25, y: 0.55, lines: ['1010'] },
-            { id: 'mockstadt', name: 'Mockstadt', x: 0.45, y: 0.55, lines: ['1010'] },
-            { id: 'spring1', name: 'Springfield (Eingang)', x: 0.65, y: 0.55, lines: ['1010', '8080'] },
-            { id: 'spring2', name: 'Springfield (Clean Code)', x: 0.85, y: 0.55, lines: ['1010'] },
-            { id: 'supersonic', name: 'Supersonic-Steig', x: 0.45, y: 0.82, lines: ['1337'] },
-            { id: 'topic', name: 'Zum Topic-Tor', x: 0.75, y: 0.82, lines: ['1337'] },
-            { id: 'docker', name: 'Am Docker-Dock', x: 0.75, y: 0.25, lines: ['8080'] },
-            { id: 'podstetten', name: 'Podstetten', x: 0.9, y: 0.25, lines: ['8080'] }
-        ];
-
-        const linePaths = [
-            { id: '42', color: '#3b82f6', route: ['pipeline', 'api', 'ngzone'] },
-            { id: '1010', color: '#f97316', route: ['pipeline', 'lambda', 'mockstadt', 'spring1', 'spring2'] },
-            { id: '1337', color: '#10b981', route: ['api', 'supersonic', 'topic'] },
-            { id: '8080', color: '#a855f7', route: ['spring1', 'docker', 'podstetten'] }
-        ];
+        function sendInterestEmail(stationTitle, subtitle) {
+            const u = "competence-center", d = "atvantage.com";
+            const s = encodeURIComponent(`Interesse am Kurs ${subtitle}`);
+            const b = encodeURIComponent(`Hallo Competence Center Team,\n\nich habe Interesse am Kurs "${subtitle}" (Haltestelle: ${stationTitle}) und bitte daher um nähere Details.\n\nMit freundlichen Grüßen`);
+            window.location.href = `mailto:${u}@${d}?subject=${s}&body=${b}`;
+        }
 
         function resize() {
             const container = document.getElementById('map-container');
@@ -461,67 +388,194 @@ Moderne Frontend-Entwicklung mit Angular.
             ctx.lineTo(x, y + radius);
             ctx.quadraticCurveTo(x, y, x + radius, y);
             ctx.closePath();
-            ctx.fill();
-            ctx.stroke();
+            ctx.fill(); ctx.stroke();
+        }
+
+        function getAugmentedSegments(line) {
+            const segments = [];
+            for (let i = 0; i < line.stations.length - 1; i++) {
+                const s1 = line.stations[i];
+                const s2 = line.stations[i + 1];
+                const p1 = coordinateMap[s1];
+                const p2 = coordinateMap[s2];
+                if (!p1 || !p2) continue;
+
+                const intermediate = activeData.stations
+                    .filter(s => s.id !== s1 && s.id !== s2)
+                    .map(s => ({ id: s.id, pos: coordinateMap[s.id] }))
+                    .filter(s => {
+                        if (!s.pos) return false;
+                        const cross = (s.pos.y - p1.y) * (p2.x - p1.x) - (s.pos.x - p1.x) * (p2.y - p1.y);
+                        if (Math.abs(cross) > 0.01) return false;
+                        const dot = (s.pos.x - p1.x) * (p2.x - p1.x) + (s.pos.y - p1.y) * (p2.y - p1.y);
+                        if (dot < 0) return false;
+                        const squaredLength = Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2);
+                        return dot < squaredLength;
+                    })
+                    .sort((a, b) => {
+                        const distA = Math.pow(a.pos.x - p1.x, 2) + Math.pow(a.pos.y - p1.y, 2);
+                        const distB = Math.pow(b.pos.x - p1.x, 2) + Math.pow(b.pos.y - p1.y, 2);
+                        return distA - distB;
+                    });
+
+                let lastId = s1;
+                intermediate.forEach(inter => {
+                    segments.push({ from: lastId, to: inter.id });
+                    lastId = inter.id;
+                });
+                segments.push({ from: lastId, to: s2 });
+            }
+            return segments;
+        }
+
+        function getParallelLinesOnSegment(fromId, toId) {
+            return activeData.lines.filter(line => {
+                const segments = getAugmentedSegments(line);
+                return segments.some(seg => (seg.from === fromId && seg.to === toId) || (seg.from === toId && seg.to === fromId));
+            });
         }
 
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             const w = canvas.width, h = canvas.height;
+            const lineGap = 6;
 
-            linePaths.forEach(line => {
-                ctx.beginPath();
-                ctx.strokeStyle = line.color;
-                ctx.lineWidth = 8;
-                ctx.lineCap = 'round';
-                ctx.lineJoin = 'round';
-                const pts = line.route.map(id => stations.find(s => s.id === id));
-                pts.forEach((p, i) => {
-                    const px = p.x * w, py = p.y * h;
-                    if (i === 0) ctx.moveTo(px, py);
-                    else ctx.lineTo(px, py);
+            // Individuelle Verlängerung zur Entzerrung der Startnummern
+            const getExtension = (lid) => lid === "8080" ? 80 : 40;
+
+            // 1. Linienstriche zeichnen
+            activeData.lines.forEach(line => {
+                const col = lineColors[line.id] || '#fff';
+                ctx.strokeStyle = col;
+                ctx.lineWidth = 4;
+                ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+
+                const segments = getAugmentedSegments(line);
+
+                segments.forEach((seg, i) => {
+                    const p1 = coordinateMap[seg.from];
+                    const p2 = coordinateMap[seg.to];
+                    if (!p1 || !p2) return;
+
+                    const shared = getParallelLinesOnSegment(seg.from, seg.to);
+                    const lineIdx = shared.findIndex(l => l.id === line.id);
+                    const totalShared = shared.length;
+                    const offsetVal = (lineIdx - (totalShared - 1) / 2) * lineGap;
+
+                    const dx = (p2.x - p1.x) * w;
+                    const dy = (p2.y - p1.y) * h;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist === 0) return;
+
+                    const nx = -dy / dist;
+                    const ny = dx / dist;
+
+                    let xStart = p1.x * w + nx * offsetVal;
+                    let yStart = p1.y * h + ny * offsetVal;
+                    let xEnd = p2.x * w + nx * offsetVal;
+                    let yEnd = p2.y * h + ny * offsetVal;
+
+                    if (i === 0 && seg.from === line.stations[0]) {
+                        const vx = -(dx / dist);
+                        const vy = -(dy / dist);
+                        xStart += vx * getExtension(line.id);
+                        yStart += vy * getExtension(line.id);
+                    }
+
+                    ctx.beginPath();
+                    ctx.moveTo(xStart, yStart);
+                    ctx.lineTo(xEnd, yEnd);
+                    ctx.stroke();
                 });
-                ctx.stroke();
             });
 
-            stations.forEach(s => {
-                const px = s.x * w, py = s.y * h;
+            // 2. Liniennummern (Boxen) zeichnen
+            activeData.lines.forEach(line => {
+                const col = lineColors[line.id] || '#fff';
+                const firstSId = line.stations[0];
+                const secondSId = line.stations[1];
+                const p1 = coordinateMap[firstSId];
+                const p2 = coordinateMap[secondSId];
+                if (!p1 || !p2) return;
+
+                const shared = getParallelLinesOnSegment(firstSId, secondSId);
+                const lineIdx = shared.findIndex(l => l.id === line.id);
+                const totalShared = shared.length;
+                const offsetVal = (lineIdx - (totalShared - 1) / 2) * lineGap;
+
+                const dx = (p2.x - p1.x) * w;
+                const dy = (p2.y - p1.y) * h;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                const nx = -dy / dist;
+                const ny = dx / dist;
+
+                const xBase = p1.x * w + nx * offsetVal;
+                const yBase = p1.y * h + ny * offsetVal;
+
+                const vx = -(dx / dist);
+                const vy = -(dy / dist);
+                const tipX = xBase + vx * getExtension(line.id);
+                const tipY = yBase + vy * getExtension(line.id);
+
+                ctx.save();
+                ctx.font = 'bold 11px Space Grotesk';
+                const idText = line.id;
+                const idWidth = ctx.measureText(idText).width;
+                const bPadding = 5;
+                const bW = idWidth + bPadding * 2;
+                const bH = 16;
+                const bX = tipX - bW / 2;
+                const bY = tipY - bH / 2;
+
+                ctx.fillStyle = '#050810';
+                ctx.strokeStyle = col;
+                ctx.lineWidth = 1.5;
+                fillRoundRect(bX, bY, bW, bH, 3);
+
+                ctx.fillStyle = '#fff';
+                ctx.textAlign = 'center';
+                ctx.fillText(idText, tipX, tipY + 4);
+                ctx.restore();
+            });
+
+            // 3. Stationen zeichnen
+            activeData.stations.forEach(s => {
+                const pos = coordinateMap[s.id];
+                if (!pos) return;
+                const px = pos.x * w, py = pos.y * h;
                 const isHovered = s.id === hoveredStationId;
 
                 if (isHovered) {
-                    ctx.shadowBlur = 20;
-                    ctx.shadowColor = 'rgba(255, 255, 255, 0.85)';
-                } else {
-                    ctx.shadowBlur = 0;
+                    ctx.shadowBlur = 15;
+                    ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
                 }
 
                 ctx.beginPath();
-                ctx.arc(px, py, 16, 0, Math.PI * 2);
+                ctx.arc(px, py, 14, 0, Math.PI * 2);
                 ctx.fillStyle = '#050810'; ctx.fill();
                 ctx.strokeStyle = isHovered ? '#fff' : 'rgba(255,255,255,0.7)';
-                ctx.lineWidth = isHovered ? 2 : 1.5;
+                ctx.lineWidth = isHovered ? 2 : 1.2;
                 ctx.stroke();
 
                 ctx.beginPath();
-                ctx.arc(px, py, 6, 0, Math.PI * 2);
+                ctx.arc(px, py, 5, 0, Math.PI * 2);
                 ctx.fillStyle = '#fff'; ctx.fill();
 
-                ctx.font = '500 11px "Plus Jakarta Sans"';
-                const textWidth = ctx.measureText(s.name).width;
-                const boxPaddingX = 8;
-                const boxW = textWidth + boxPaddingX * 2;
+                ctx.font = '600 11px Plus Jakarta Sans';
+                const textWidth = ctx.measureText(s.title).width;
+                const boxW = textWidth + 14;
                 const boxH = 18;
                 const boxX = px - boxW / 2;
-                const boxY = py + 28;
+                const boxY = py + 22;
 
                 ctx.fillStyle = '#050810';
-                ctx.strokeStyle = isHovered ? '#fff' : 'rgba(255,255,255,0.7)';
-                ctx.lineWidth = isHovered ? 1.5 : 1;
+                ctx.strokeStyle = isHovered ? '#fff' : 'rgba(255,255,255,0.4)';
+                ctx.lineWidth = 1;
                 fillRoundRect(boxX, boxY, boxW, boxH, 4);
 
                 ctx.fillStyle = isHovered ? '#fff' : '#f8fafc';
                 ctx.textAlign = 'center';
-                ctx.fillText(s.name, px, boxY + 13);
+                ctx.fillText(s.title, px, boxY + 12.5);
                 ctx.shadowBlur = 0;
             });
         }
@@ -536,14 +590,15 @@ Moderne Frontend-Entwicklung mit Angular.
 
         function getStationAtPos(pos) {
             const w = canvas.width, h = canvas.height;
-            for (const s of stations) {
-                const px = s.x * w, py = s.y * h;
+            for (const s of activeData.stations) {
+                const c = coordinateMap[s.id];
+                if (!c) continue;
+                const px = c.x * w, py = c.y * h;
                 const distToCircle = Math.sqrt(Math.pow(pos.x - px, 2) + Math.pow(pos.y - py, 2));
-                ctx.font = '500 11px "Plus Jakarta Sans"';
-                const textWidth = ctx.measureText(s.name).width;
-                const boxW = textWidth + 16;
-                const boxX = px - boxW / 2;
-                const inCompositeArea = pos.x >= boxX && pos.x <= boxX + boxW && pos.y >= py && pos.y <= py + 46;
+                ctx.font = '600 11px "Plus Jakarta Sans"';
+                const textWidth = ctx.measureText(s.title).width;
+                const boxW = textWidth + 14;
+                const inCompositeArea = pos.x >= (px - boxW / 2) && pos.x <= (px + boxW / 2) && pos.y >= py && pos.y <= py + 40;
                 if (distToCircle < 20 || inCompositeArea) return s;
             }
             return null;
@@ -575,17 +630,41 @@ Moderne Frontend-Entwicklung mit Angular.
             const pos = getMousePos(e);
             const s = getStationAtPos(pos);
             if (s) {
-                modalBody.innerHTML = marked.parse(stationsData[s.name]);
+                modalBody.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-[1.5fr_1fr] max-h-[85vh]">
+                        <div class="p-10 md:p-12 border-r border-white/10 border-r-atv overflow-y-auto max-h-[85vh]">
+                            <h1 class="popup-header-title">${s.subtitle}</h1>
+                            <div class="popup-description">
+                                <p>${s.description}</p>
+                            </div>
+                        </div>
+                        <div class="popup-visual-container">
+                            <div class="relative flex flex-col items-center">
+                                <div class="w-16 h-16 rounded-full border-4 border-white/70 bg-[#050810] flex items-center justify-center shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+                                    <div class="w-4 h-4 rounded-full bg-white"></div>
+                                </div>
+                                <div class="mt-6 px-4 py-2 bg-[#050810] border border-white/20 rounded-lg shadow-lg">
+                                    <span class="text-white font-semibold text-sm tracking-tight">${s.title}</span>
+                                </div>
+                                <div class="mt-12">
+                                    <button onclick="sendInterestEmail('${s.title}', '${s.subtitle}')" class="atv-btn py-3 px-8 text-[11px] whitespace-nowrap">
+                                        Das interessiert mich <i class="fa-solid fa-chevron-right ml-2 text-[9px]"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
                 toggleModal(true);
                 tooltip.style.display = 'none';
             }
         }
 
         function toggleModal(show) {
-            modal.style.display = show ? 'flex' : 'none';
+            document.getElementById('detailModal').style.display = show ? 'flex' : 'none';
             document.body.style.overflow = show ? 'hidden' : 'auto';
         }
-        function closeModal(e) { if (e.target === modal) toggleModal(false); }
+        function closeModal(e) { if (e.target.id === 'detailModal') toggleModal(false); }
 
         window.addEventListener('resize', resize);
         canvas.addEventListener('mousemove', handleMouseMove);
@@ -593,16 +672,10 @@ Moderne Frontend-Entwicklung mit Angular.
         canvas.addEventListener('touchstart', (e) => {
             const pos = getMousePos(e);
             const s = getStationAtPos(pos);
-            if (s) {
-                e.preventDefault();
-                handleInteraction(e);
-            }
+            if (s) { e.preventDefault(); handleInteraction(e); }
         });
 
-        window.onload = () => {
-            parseMarkdown();
-            setTimeout(resize, 150);
-        };
+        window.onload = initData;
     </script>
 </body>
 
